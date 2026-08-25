@@ -73,4 +73,51 @@
       { passive: true }
     );
   }
+
+  /* Contact form submission */
+  var contactForm = document.getElementById("contact-form");
+
+  if (contactForm) {
+    var CONTACT_WEBHOOK_URL = "https://n8n-production-7a6e1.up.railway.app/webhook/a6bf3c28-2dbd-4050-b81e-164534b8a9df";
+    var submitBtn = contactForm.querySelector(".contact-form__submit");
+    var errorEl = document.getElementById("contact-form-error");
+    var successEl = document.getElementById("contact-success");
+
+    contactForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      errorEl.hidden = true;
+      submitBtn.disabled = true;
+      submitBtn.classList.add("is-loading");
+
+      var formData = new FormData(contactForm);
+      var payload = {
+        name: String(formData.get("name") || "").trim(),
+        email: String(formData.get("email") || "").trim(),
+        message: String(formData.get("message") || "").trim(),
+        source: "website"
+      };
+
+      fetch(CONTACT_WEBHOOK_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      })
+        .then(function (res) {
+          if (!res.ok) {
+            throw new Error("Request failed with status " + res.status);
+          }
+          contactForm.hidden = true;
+          successEl.hidden = false;
+        })
+        .catch(function () {
+          errorEl.textContent = "Something went wrong sending your message. Please try again, or email us directly.";
+          errorEl.hidden = false;
+        })
+        .finally(function () {
+          submitBtn.disabled = false;
+          submitBtn.classList.remove("is-loading");
+        });
+    });
+  }
 })();
