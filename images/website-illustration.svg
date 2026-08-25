@@ -1,0 +1,42 @@
+<svg width="100%" viewBox="0 0 680 520" xmlns="http://www.w3.org/2000/svg" role="img">
+<title>Abstract illustration of a modern website mockup</title>
+<desc>A dark browser window mockup with a hero heading, a call-to-action button, and a grid of content cards, with a teal upward arrow suggesting growth, on a near-black background.</desc>
+<defs>
+<marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+<path d="M2 1L8 5L2 9" fill="none" stroke="#5DCAA5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</marker>
+<linearGradient id="glow" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0%" stop-color="#5DCAA5" stop-opacity="0.18"/>
+<stop offset="100%" stop-color="#5DCAA5" stop-opacity="0"/>
+</linearGradient>
+</defs>
+<rect x="0" y="0" width="680" height="520" fill="#0B0D0F"/>
+<circle cx="560" cy="90" r="140" fill="url(#glow)"/>
+<circle cx="90" cy="440" r="120" fill="url(#glow)"/>
+<rect x="90" y="70" width="500" height="380" rx="14" fill="#14171A" stroke="#262B2F" stroke-width="1"/>
+<rect x="90" y="70" width="500" height="42" rx="14" fill="#181C1F" stroke="#262B2F" stroke-width="1"/>
+<rect x="90" y="98" width="500" height="14" fill="#181C1F"/>
+<circle cx="114" cy="91" r="5" fill="#E24B4A" opacity="0.7"/>
+<circle cx="132" cy="91" r="5" fill="#EF9F27" opacity="0.7"/>
+<circle cx="150" cy="91" r="5" fill="#5DCAA5" opacity="0.7"/>
+<rect x="220" y="82" width="280" height="18" rx="6" fill="#0F1113"/>
+<rect x="126" y="150" width="290" height="20" rx="4" fill="#2C3236"/>
+<rect x="126" y="182" width="220" height="20" rx="4" fill="#2C3236"/>
+<rect x="126" y="222" width="360" height="12" rx="4" fill="#1E2225"/>
+<rect x="126" y="244" width="300" height="12" rx="4" fill="#1E2225"/>
+<rect x="126" y="278" width="150" height="36" rx="8" fill="#5DCAA5"/>
+<text x="150" y="301" fill="#04342C" font-size="14" font-weight="500" font-family="sans-serif">Book a call</text>
+<rect x="126" y="342" width="140" height="82" rx="8" fill="#181C1F" stroke="#262B2F" stroke-width="1"/>
+<rect x="146" y="360" width="24" height="24" rx="6" fill="#1D9E75" opacity="0.35"/>
+<rect x="146" y="392" width="100" height="10" rx="3" fill="#2C3236"/>
+<rect x="146" y="408" width="70" height="8" rx="3" fill="#1E2225"/>
+<rect x="280" y="342" width="140" height="82" rx="8" fill="#181C1F" stroke="#262B2F" stroke-width="1"/>
+<rect x="300" y="360" width="24" height="24" rx="6" fill="#1D9E75" opacity="0.35"/>
+<rect x="300" y="392" width="100" height="10" rx="3" fill="#2C3236"/>
+<rect x="300" y="408" width="70" height="8" rx="3" fill="#1E2225"/>
+<rect x="434" y="342" width="140" height="82" rx="8" fill="#181C1F" stroke="#262B2F" stroke-width="1"/>
+<rect x="454" y="360" width="24" height="24" rx="6" fill="#1D9E75" opacity="0.35"/>
+<rect x="454" y="392" width="100" height="10" rx="3" fill="#2C3236"/>
+<rect x="454" y="408" width="70" height="8" rx="3" fill="#1E2225"/>
+<polyline points="500,205 540,175 570,190 610,120" fill="none" stroke="#5DCAA5" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+</svg>
