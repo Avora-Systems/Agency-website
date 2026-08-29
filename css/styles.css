@@ -768,6 +768,73 @@ p {
 }
 
 /* ============================================================
+   Legal pages
+   ============================================================ */
+
+.legal {
+  padding: 9.5rem 0 6rem;
+}
+
+.legal__back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-bottom: 2rem;
+  transition: color var(--dur-fast) var(--ease);
+}
+
+.legal__back:hover {
+  color: var(--accent);
+}
+
+.legal h1 {
+  font-size: clamp(2rem, 4vw, 2.75rem);
+}
+
+.legal__updated {
+  color: var(--text-faint);
+  font-size: 0.9rem;
+  margin-top: 0.75rem;
+}
+
+.legal-card {
+  max-width: 760px;
+  margin: 2.5rem auto 0;
+  background: var(--surface);
+  border: 1px solid var(--surface-border);
+  border-radius: var(--radius-lg);
+  padding: clamp(2rem, 5vw, 3rem);
+}
+
+.legal-card h2 {
+  font-size: 1.15rem;
+  margin-top: 2rem;
+}
+
+.legal-card h2:first-child {
+  margin-top: 0;
+}
+
+.legal-card p {
+  color: var(--text-muted);
+  margin-top: 0.85rem;
+  max-width: 65ch;
+}
+
+.legal-card a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.legal-card a:hover {
+  color: var(--accent-strong);
+}
+
+/* ============================================================
    Footer
    ============================================================ */
 
@@ -810,6 +877,16 @@ p {
   padding-top: 1.5rem;
   border-top: 1px solid var(--surface-border);
   margin-top: 0.5rem;
+}
+
+.footer__copy a {
+  color: var(--text-faint);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.footer__copy a:hover {
+  color: var(--accent);
 }
 
 /* ============================================================
@@ -881,6 +958,10 @@ p {
   .showcase,
   .contact {
     padding: 4.5rem 0;
+  }
+
+  .legal {
+    padding: 7.5rem 0 4rem;
   }
 
   .cta-banner {
