@@ -328,11 +328,66 @@ p {
   position: relative;
 }
 
+.how-it-works h2,
 .problems h2,
 .services h2,
 .showcase h2,
 .cta-banner h2 {
   font-size: clamp(1.75rem, 3.2vw, 2.5rem);
+}
+
+/* ============================================================
+   How it works
+   ============================================================ */
+
+.how-it-works {
+  padding: 7rem 0;
+  position: relative;
+}
+
+.steps {
+  margin-top: 3.5rem;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.75rem;
+}
+
+.step {
+  position: relative;
+}
+
+.step:not(:first-child)::before {
+  content: "";
+  position: absolute;
+  top: 1.375rem;
+  left: -1.75rem;
+  width: 1.75rem;
+  height: 2px;
+  background: var(--surface-border);
+}
+
+.step__number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 50%;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 1.1rem;
+  margin-bottom: 1.5rem;
+}
+
+.step h3 {
+  font-size: 1.2rem;
+  margin-bottom: 0.75rem;
+}
+
+.step p {
+  color: var(--text-muted);
+  font-size: 0.96rem;
 }
 
 .problem-grid {
@@ -904,6 +959,14 @@ p {
   transform: translateY(0);
 }
 
+.steps .step:nth-child(2) {
+  transition-delay: 0.08s;
+}
+
+.steps .step:nth-child(3) {
+  transition-delay: 0.16s;
+}
+
 .problem-grid .problem-card:nth-child(2) {
   transition-delay: 0.08s;
 }
@@ -933,6 +996,14 @@ p {
    ============================================================ */
 
 @media (max-width: 900px) {
+  .steps {
+    grid-template-columns: 1fr;
+  }
+
+  .step:not(:first-child)::before {
+    display: none;
+  }
+
   .problem-grid {
     grid-template-columns: 1fr;
   }
@@ -953,6 +1024,7 @@ p {
     padding-bottom: 5rem;
   }
 
+  .how-it-works,
   .problems,
   .services,
   .showcase,
