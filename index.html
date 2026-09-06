@@ -6,101 +6,122 @@
 <title>Avora Systems — AI Automation &amp; Websites for Small UK Businesses</title>
 <meta name="description" content="Avora Systems helps small UK businesses respond faster, cut admin, and win more work with AI automation and modern websites. Book a free automation audit.">
 <link rel="icon" href="data:,">
+<link rel="preload" as="font" type="font/woff2" href="fonts/schibsted-grotesk-latin.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="fonts/inter-latin.woff2" crossorigin>
 <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
 
 <a class="skip-link" href="#main">Skip to content</a>
 
-<header class="navbar" id="navbar">
-  <div class="navbar__inner">
+<header class="site-header" id="site-header">
+  <div class="wrap site-header__inner">
     <a href="#top" class="wordmark">Avora Systems</a>
-    <a class="btn btn--primary btn--nav" href="https://calendly.com/tom-avora-systems/free-automation-audit-call" target="_blank" rel="noopener">Book a Free Audit</a>
+    <button class="menu-toggle" id="menu-toggle" type="button" aria-expanded="false" aria-controls="nav-overlay" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
   </div>
 </header>
+
+<nav class="nav-overlay" id="nav-overlay" aria-label="Primary">
+  <div class="nav-overlay__spacer"></div>
+  <div class="nav-overlay__links">
+    <a href="#how-it-works">How it works</a>
+    <a href="#services">What we build</a>
+    <a href="#build">What I could build for you</a>
+    <a href="#showcase">See it in action</a>
+    <a href="#contact">Contact</a>
+  </div>
+  <div class="nav-overlay__foot">
+    <a class="text-link text-link--accent" href="https://calendly.com/tom-avora-systems/free-automation-audit-call" target="_blank" rel="noopener">Book a free audit</a>
+    <a href="mailto:tom@avora-systems.com">tom@avora-systems.com</a>
+  </div>
+</nav>
 
 <main id="main">
 
   <section class="hero" id="top">
-    <div class="hero__bg" aria-hidden="true">
-      <span class="blob blob--one"></span>
-      <span class="blob blob--two"></span>
-      <span class="blob blob--three"></span>
-      <span class="grain"></span>
+    <div class="wrap hero__inner">
+      <span class="hero__eyebrow">AI Automation &amp; Websites for Small UK Businesses</span>
+      <h1 class="hero__title">Less admin, faster replies, and <span class="accent-phrase">more time to run your business.</span></h1>
+      <p class="hero__sub">We build AI automation and modern websites that clear the busywork, so leads get answered in minutes, not days.</p>
+      <div class="hero__actions">
+        <a class="text-link text-link--lg" href="https://calendly.com/tom-avora-systems/free-automation-audit-call" target="_blank" rel="noopener">
+          Book a free audit
+          <svg class="arrow" width="17" height="17" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.5 8h9M8.5 3.5 13 8l-4.5 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <span class="hero__note">30 minutes &middot; No obligation</span>
+      </div>
     </div>
 
-    <div class="hero__content reveal">
-      <p class="eyebrow">AI Automation &amp; Websites for Small UK Businesses</p>
-      <h1>Less admin. Faster response times.<br>More time to run your business.</h1>
-      <p class="hero__sub">We build AI automation and modern websites that handle the busywork — so leads get answered in minutes, not days.</p>
-      <div class="hero__actions">
-        <a class="btn btn--primary btn--lg" href="https://calendly.com/tom-avora-systems/free-automation-audit-call" target="_blank" rel="noopener">
-          Book a Free Audit
-          <svg class="btn__arrow" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.5 8h9M8.5 3.5 13 8l-4.5 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </a>
-        <span class="hero__note">30 minutes · No obligation</span>
-      </div>
+    <div class="hero__scroll" aria-hidden="true">
+      <span class="hero__scroll-label">Scroll</span>
+      <span class="hero__scroll-line"></span>
+      <svg class="hero__scroll-arrow" viewBox="0 0 12 12" fill="none"><path d="M6 1v9M2.5 6.5 6 10l3.5-3.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </div>
   </section>
 
-  <section class="how-it-works" id="how-it-works" aria-labelledby="how-it-works-heading">
-    <div class="section-inner">
-      <h2 id="how-it-works-heading" class="reveal">How it works</h2>
-      <p class="section-lede reveal">From first call to full automation, in three steps.</p>
+  <section class="section how-it-works" id="how-it-works" aria-labelledby="how-heading">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <h2 id="how-heading">How it works</h2>
+        <p class="section-lede">From first call to full automation, in three steps.</p>
+      </div>
 
       <div class="steps">
         <div class="step reveal">
-          <span class="step__number">1</span>
-          <h3>Free Audit Call</h3>
-          <p>We look at your current admin, enquiries, and workflows, and show you exactly what could be running on autopilot.</p>
+          <span class="step__n">01</span>
+          <h3>Free audit call</h3>
+          <p>We look at your current admin, enquiries and workflows, and show you exactly what could be running on autopilot.</p>
         </div>
         <div class="step reveal">
-          <span class="step__number">2</span>
-          <h3>We Build It</h3>
-          <p>Using AI and modern automation tools, we build the exact system your business needs — connected to the tools you already use.</p>
+          <span class="step__n">02</span>
+          <h3>We build it</h3>
+          <p>Using AI and modern automation tools, we build the exact system your business needs, connected to the tools you already use.</p>
         </div>
         <div class="step reveal">
-          <span class="step__number">3</span>
-          <h3>It Runs Itself</h3>
-          <p>Once live, enquiries get answered, bookings get confirmed, and invoices get chased automatically — day and night, no extra work from you.</p>
+          <span class="step__n">03</span>
+          <h3>It runs itself</h3>
+          <p>Once live, enquiries get answered, bookings get confirmed and invoices get chased automatically, day and night, no extra work from you.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="problems" aria-labelledby="problems-heading">
-    <div class="section-inner">
-      <h2 id="problems-heading" class="reveal">The busywork is costing you the business</h2>
-      <p class="section-lede reveal">Every hour spent chasing admin is an hour not spent serving customers — or winning new ones.</p>
+  <section class="section problems" aria-labelledby="problems-heading">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <h2 id="problems-heading">The busywork is costing you the business</h2>
+        <p class="section-lede">Every hour spent chasing admin is an hour not spent serving customers, or winning new ones.</p>
+      </div>
 
-      <div class="problem-grid">
-        <article class="problem-card reveal">
-          <span class="problem-card__index">01</span>
+      <div class="problem-list">
+        <article class="problem-row reveal">
           <h3>Slow lead response</h3>
-          <p>A prospect enquires and hears nothing back for hours — sometimes days. By the time you reply, they've already gone with a competitor who answered first.</p>
+          <p>A prospect enquires and hears nothing back for hours, sometimes days. By the time you reply, they have already gone with a competitor who answered first.</p>
         </article>
-        <article class="problem-card reveal">
-          <span class="problem-card__index">02</span>
+        <article class="problem-row reveal">
           <h3>Manual document &amp; application handling</h3>
-          <p>Forms, contracts and applications get copied by hand between inboxes, spreadsheets and systems — slow, repetitive, and one typo away from a real problem.</p>
+          <p>Forms, contracts and applications get copied by hand between inboxes, spreadsheets and systems: slow, repetitive, and one typo away from a real problem.</p>
         </article>
-        <article class="problem-card reveal">
-          <span class="problem-card__index">03</span>
+        <article class="problem-row reveal">
           <h3>Scheduling back-and-forth</h3>
-          <p>"Does Tuesday work?" "Actually, how about Thursday?" Booking a single meeting shouldn't take six emails and half a day.</p>
+          <p>"Does Tuesday work?" "Actually, how about Thursday?" Booking a single meeting should not take six emails and half a day.</p>
         </article>
       </div>
     </div>
   </section>
 
-  <section class="services" id="services" aria-labelledby="services-heading">
-    <div class="section-inner">
-      <h2 id="services-heading" class="reveal">What we build</h2>
-      <p class="section-lede reveal">Two ways we give you your time back.</p>
+  <section class="section services" id="services" aria-labelledby="services-heading">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <h2 id="services-heading">What we build</h2>
+        <p class="section-lede">Two ways we give you your time back.</p>
+      </div>
 
-      <div class="service-grid">
-        <article class="service-card reveal">
-          <div class="service-card__media">
+      <div class="svc-grid">
+        <article class="svc-card reveal">
+          <div class="svc-card__media">
             <iframe
               src="https://www.loom.com/embed/08a48ac62f27461194ec338b5aecf4e5"
               title="AI Automation overview video"
@@ -111,51 +132,140 @@
               allowfullscreen>
             </iframe>
           </div>
-          <div class="service-card__body">
-            <span class="service-card__tag">AI Automation</span>
+          <div class="svc-card__body">
+            <div class="svc-card__meta"><span class="tag">AI Automation</span></div>
             <h3>Systems that respond while you sleep</h3>
-            <p>We connect your enquiries, documents and bookings into automated workflows — instant lead replies, auto-sorted paperwork, and scheduling that runs itself.</p>
+            <p>We connect your enquiries, documents and bookings into automated workflows: instant lead replies, auto-sorted paperwork, and scheduling that runs itself.</p>
           </div>
         </article>
 
-        <article class="service-card reveal">
-          <div class="service-card__media">
-            <img
-              src="images/website-illustration-v2.svg"
-              alt="Abstract illustration of a modern website mockup"
-              loading="lazy">
+        <article class="svc-card reveal">
+          <div class="svc-card__media">
+            <img src="images/website-illustration-v2.svg" alt="Abstract illustration of a modern website mockup" loading="lazy">
           </div>
-          <div class="service-card__body">
-            <span class="service-card__tag">Website Building</span>
+          <div class="svc-card__body">
+            <div class="svc-card__meta"><span class="tag">Website Building</span></div>
             <h3>A site built to convert, not just exist</h3>
-            <p>Fast, modern websites designed around one goal: turning visitors into enquiries — built clean, built fast, and built to grow with you.</p>
+            <p>Fast, modern websites designed around one goal: turning visitors into enquiries. Built clean, built fast, and built to grow with you.</p>
           </div>
         </article>
 
-        <article class="service-card reveal">
-          <div class="service-card__media">
-            <img
-              src="images/invoicing-illustration.svg"
-              alt="Abstract illustration of automated invoicing"
-              loading="lazy">
+        <article class="svc-card svc-card--wide reveal">
+          <div class="svc-card__media">
+            <img src="images/invoicing-illustration.svg" alt="Abstract illustration of automated invoicing" loading="lazy">
           </div>
-          <div class="service-card__body">
-            <div class="service-card__tags">
-              <span class="service-card__tag">Invoicing Automation</span>
-              <span class="service-card__badge">Demo coming soon</span>
+          <div class="svc-card__body">
+            <div class="svc-card__meta">
+              <span class="tag">Invoicing Automation</span>
+              <span class="badge">Demo coming soon</span>
             </div>
             <h3>Never chase a late invoice again</h3>
-            <p>We automate the billing side of your business — invoices generated and sent the moment a job's done, with polite, automatic reminders that follow up on overdue payments until they're paid.</p>
+            <p>We automate the billing side of your business: invoices generated and sent the moment a job is done, with polite, automatic reminders that follow up on overdue payments until they are paid.</p>
           </div>
         </article>
       </div>
     </div>
   </section>
 
-  <section class="showcase" id="showcase" aria-labelledby="showcase-heading">
-    <div class="section-inner">
-      <h2 id="showcase-heading" class="reveal">See it in action</h2>
-      <p class="section-lede reveal">Real workflows, not mockups — a quick look at what we build.</p>
+  <section class="section build" id="build" aria-labelledby="build-heading">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <p class="eyebrow">What this could look like</p>
+        <h2 id="build-heading">Automations I could set up for a trade business</h2>
+        <p class="section-lede">Illustrative examples, not delivered client work. Each one is a system a plumber, electrician or builder could have running quietly in the background.</p>
+      </div>
+
+      <div class="build-list">
+        <article class="build-item reveal">
+          <div class="build-item__rail">
+            <span class="build-item__n">01</span>
+            <span class="build-item__label">Example</span>
+          </div>
+          <div class="build-item__body">
+            <h3>Never Miss a Lead Again</h3>
+            <p>A new enquiry from any channel gets an instant, personal reply, and a nudge to you if it is still unanswered an hour later.</p>
+            <ul class="pills">
+              <li>n8n</li>
+              <li>Claude API</li>
+              <li>Twilio</li>
+              <li>Gmail</li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="build-item reveal">
+          <div class="build-item__rail">
+            <span class="build-item__n">02</span>
+            <span class="build-item__label">Example</span>
+          </div>
+          <div class="build-item__body">
+            <h3>Automatic Job Scheduling</h3>
+            <p>Confirmed jobs drop straight into your calendar with travel time blocked out, and the customer gets a reminder the day before.</p>
+            <ul class="pills">
+              <li>n8n</li>
+              <li>Google Calendar</li>
+              <li>Claude API</li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="build-item reveal">
+          <div class="build-item__rail">
+            <span class="build-item__n">03</span>
+            <span class="build-item__label">Example</span>
+          </div>
+          <div class="build-item__body">
+            <h3>Invoices That Chase Themselves</h3>
+            <p>An invoice goes out the moment a job is marked done, then polite reminders run on their own until the payment lands.</p>
+            <ul class="pills">
+              <li>n8n</li>
+              <li>Xero</li>
+              <li>Gmail</li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="build-item reveal">
+          <div class="build-item__rail">
+            <span class="build-item__n">04</span>
+            <span class="build-item__label">Example</span>
+          </div>
+          <div class="build-item__body">
+            <h3>Quotes Drafted While You Drive</h3>
+            <p>Send a voice note and a few photos from site, and get a formatted quote back, ready to check over and send.</p>
+            <ul class="pills">
+              <li>n8n</li>
+              <li>Claude API</li>
+              <li>WhatsApp</li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="build-item reveal">
+          <div class="build-item__rail">
+            <span class="build-item__n">05</span>
+            <span class="build-item__label">Example</span>
+          </div>
+          <div class="build-item__body">
+            <h3>Your Inbox, Pre-Sorted</h3>
+            <p>Enquiries, supplier emails and receipts get read, labelled and filed automatically, with the urgent ones flagged for you first.</p>
+            <ul class="pills">
+              <li>n8n</li>
+              <li>Claude API</li>
+              <li>Gmail</li>
+            </ul>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section showcase" id="showcase" aria-labelledby="showcase-heading">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <h2 id="showcase-heading">See it in action</h2>
+        <p class="section-lede">Real workflows, not mockups. A quick look at what we build.</p>
+      </div>
 
       <div class="showcase-grid">
         <article class="showcase-card reveal">
@@ -206,40 +316,99 @@
     </div>
   </section>
 
-  <section class="cta-banner" aria-labelledby="cta-heading">
-    <div class="cta-banner__inner reveal">
+  <!-- ============================================================
+       TESTIMONIALS — ready to enable when real client quotes exist.
+       Remove this comment wrapper (this line and the closing one below)
+       to activate. Styling and slider behaviour are already in place;
+       replace the placeholder quotes, names, roles and avatar images.
+       ============================================================
+  <section class="section testimonials" id="testimonials" aria-labelledby="testi-heading">
+    <div class="wrap">
+      <h2 id="testi-heading" class="visually-hidden">What clients say</h2>
+
+      <figure class="testi">
+        <blockquote class="testi__quote">
+          <p>Leads that used to sit in the inbox overnight now get a reply before I have finished the job I am on. It paid for itself in the first fortnight.</p>
+        </blockquote>
+        <figcaption class="testi__cite">
+          <img class="testi__avatar" src="images/testimonial-placeholder.jpg" alt="" width="46" height="46">
+          <span class="testi__name">Dave Whitcombe</span>
+          <span class="testi__role">Whitcombe Plumbing &amp; Heating, Taunton</span>
+        </figcaption>
+      </figure>
+
+      <figure class="testi" hidden>
+        <blockquote class="testi__quote">
+          <p>The quoting automation alone saves me an evening a week. Photos and a voice note in, a tidy quote out.</p>
+        </blockquote>
+        <figcaption class="testi__cite">
+          <img class="testi__avatar" src="images/testimonial-placeholder.jpg" alt="" width="46" height="46">
+          <span class="testi__name">Priya Nair</span>
+          <span class="testi__role">Nair Electrical, Bristol</span>
+        </figcaption>
+      </figure>
+
+      <figure class="testi" hidden>
+        <blockquote class="testi__quote">
+          <p>I stopped doing invoice chasing entirely. The reminders are politer than I would be, and the money comes in faster.</p>
+        </blockquote>
+        <figcaption class="testi__cite">
+          <img class="testi__avatar" src="images/testimonial-placeholder.jpg" alt="" width="46" height="46">
+          <span class="testi__name">Mark Ellery</span>
+          <span class="testi__role">Ellery Groundworks, Wells</span>
+        </figcaption>
+      </figure>
+
+      <div class="testi__nav">
+        <button class="testi__arrow" type="button" data-testi-dir="prev" aria-label="Previous testimonial">
+          <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M10 3 5 8l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <span class="testi__count"><span data-testi-current>01</span> / <span data-testi-total>03</span></span>
+        <span class="testi__progress"><span data-testi-bar></span></span>
+        <button class="testi__arrow" type="button" data-testi-dir="next" aria-label="Next testimonial">
+          <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+    </div>
+  </section>
+  ============================================================ -->
+
+  <section class="section cta" aria-labelledby="cta-heading">
+    <div class="wrap reveal">
       <h2 id="cta-heading">Get a free automation audit</h2>
-      <p>We'll look at your current workflow and show you exactly where time and leads are slipping through the cracks — no pitch, no pressure.</p>
-      <a class="btn btn--primary btn--lg" href="https://calendly.com/tom-avora-systems/free-automation-audit-call" target="_blank" rel="noopener">
-        Book a Free Audit
-        <svg class="btn__arrow" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.5 8h9M8.5 3.5 13 8l-4.5 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <p>We will look at your current workflow and show you exactly where time and leads are slipping through the cracks. No pitch, no pressure.</p>
+      <a class="text-link text-link--lg" href="https://calendly.com/tom-avora-systems/free-automation-audit-call" target="_blank" rel="noopener">
+        Book a free audit
+        <svg class="arrow" width="17" height="17" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.5 8h9M8.5 3.5 13 8l-4.5 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </a>
     </div>
   </section>
 
-  <section class="contact" id="contact" aria-labelledby="contact-heading">
-    <div class="section-inner">
-      <h2 id="contact-heading" class="reveal">Get in touch</h2>
-      <p class="section-lede reveal">Got a question or want to talk through your workflow? Send us a message and we'll get back to you.</p>
+  <section class="section contact" id="contact" aria-labelledby="contact-heading">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <h2 id="contact-heading">Get in touch</h2>
+        <p class="section-lede">Got a question or want to talk through your workflow? Send a message and we will get back to you.</p>
+      </div>
 
       <div class="contact-card reveal">
         <form class="contact-form" id="contact-form">
-          <div class="form-field">
+          <div class="field">
             <label for="contact-name">Name</label>
             <input type="text" id="contact-name" name="name" autocomplete="name" required>
           </div>
-          <div class="form-field">
+          <div class="field">
             <label for="contact-email">Email</label>
             <input type="email" id="contact-email" name="email" autocomplete="email" required>
           </div>
-          <div class="form-field">
+          <div class="field">
             <label for="contact-message">Message</label>
             <textarea id="contact-message" name="message" rows="5" required></textarea>
           </div>
 
           <p class="contact-form__error" id="contact-form-error" role="alert" hidden></p>
 
-          <button type="submit" class="btn btn--primary btn--lg contact-form__submit">
+          <button type="submit" class="contact-form__submit">
             <span class="btn__label">Send message</span>
             <span class="btn__spinner" aria-hidden="true"></span>
             <svg class="btn__arrow" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.5 8h9M8.5 3.5 13 8l-4.5 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -251,7 +420,7 @@
             <svg width="22" height="22" viewBox="0 0 16 16" fill="none"><path d="M3.5 8.5 6.5 11.5 12.5 4.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </span>
           <h3>Message sent</h3>
-          <p>Thanks for reaching out — we'll be in touch soon.</p>
+          <p>Thanks for reaching out, we will be in touch soon.</p>
         </div>
       </div>
     </div>
@@ -260,7 +429,7 @@
 </main>
 
 <footer class="footer">
-  <div class="footer__inner">
+  <div class="wrap footer__inner">
     <span class="wordmark wordmark--footer">Avora Systems</span>
     <div class="footer__links">
       <a href="mailto:tom@avora-systems.com">tom@avora-systems.com</a>

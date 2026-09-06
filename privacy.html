@@ -6,23 +6,42 @@
 <title>Privacy Policy — Avora Systems</title>
 <meta name="description" content="Avora Systems privacy policy: what information we collect through this website, how we use it, and your rights under UK GDPR.">
 <link rel="icon" href="data:,">
+<link rel="preload" as="font" type="font/woff2" href="fonts/schibsted-grotesk-latin.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="fonts/inter-latin.woff2" crossorigin>
 <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
 
 <a class="skip-link" href="#main">Skip to content</a>
 
-<header class="navbar" id="navbar">
-  <div class="navbar__inner">
+<header class="site-header" id="site-header">
+  <div class="wrap site-header__inner">
     <a href="index.html#top" class="wordmark">Avora Systems</a>
-    <a class="btn btn--primary btn--nav" href="https://calendly.com/tom-avora-systems/free-automation-audit-call" target="_blank" rel="noopener">Book a Free Audit</a>
+    <button class="menu-toggle" id="menu-toggle" type="button" aria-expanded="false" aria-controls="nav-overlay" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
   </div>
 </header>
+
+<nav class="nav-overlay" id="nav-overlay" aria-label="Primary">
+  <div class="nav-overlay__spacer"></div>
+  <div class="nav-overlay__links">
+    <a href="index.html#how-it-works">How it works</a>
+    <a href="index.html#services">What we build</a>
+    <a href="index.html#build">What I could build for you</a>
+    <a href="index.html#showcase">See it in action</a>
+    <a href="index.html#contact">Contact</a>
+  </div>
+  <div class="nav-overlay__foot">
+    <a class="text-link text-link--accent" href="https://calendly.com/tom-avora-systems/free-automation-audit-call" target="_blank" rel="noopener">Book a free audit</a>
+    <a href="mailto:tom@avora-systems.com">tom@avora-systems.com</a>
+  </div>
+</nav>
 
 <main id="main">
 
   <section class="legal" aria-labelledby="legal-heading">
-    <div class="section-inner">
+    <div class="wrap">
       <a class="legal__back" href="index.html">
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M12.5 8h-9M7.5 3.5 3 8l4.5 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
         Back to home
@@ -55,7 +74,7 @@
 </main>
 
 <footer class="footer">
-  <div class="footer__inner">
+  <div class="wrap footer__inner">
     <span class="wordmark wordmark--footer">Avora Systems</span>
     <div class="footer__links">
       <a href="mailto:tom@avora-systems.com">tom@avora-systems.com</a>
