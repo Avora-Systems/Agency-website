@@ -1,0 +1,18 @@
+# Files in this directory that must NOT be uploaded as public static assets.
+# Wrangler (Workers Static Assets) reads this like a .gitignore.
+
+.git
+.git/**
+.wrangler
+.wrangler/**
+.gitignore
+.assetsignore
+.DS_Store
+**/.DS_Store
+node_modules
+node_modules/**
+
+# Repo docs / deploy config — no reason to serve these
+AGENTS.md
+CLAUDE.md
+wrangler.jsonc
