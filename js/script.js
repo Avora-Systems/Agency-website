@@ -179,4 +179,72 @@
         });
     });
   }
+
+  /* ----------------------------------------------------------
+     Cookie consent + gated video embeds
+     Loom iframes are not loaded until the visitor accepts.
+     Until then, each embed shows a "Click to load video"
+     placeholder. The choice is remembered in localStorage.
+     ---------------------------------------------------------- */
+  var CONSENT_KEY = "avora-cookie-consent";
+  var cookieBar = document.getElementById("cookie-bar");
+
+  var readConsent = function () {
+    try {
+      return window.localStorage.getItem(CONSENT_KEY) === "accepted";
+    } catch (e) {
+      return false;
+    }
+  };
+
+  var storeConsent = function () {
+    try {
+      window.localStorage.setItem(CONSENT_KEY, "accepted");
+    } catch (e) {}
+  };
+
+  var buildEmbed = function (el) {
+    var iframe = document.createElement("iframe");
+    iframe.src = el.getAttribute("data-loom-src");
+    iframe.title = el.getAttribute("data-loom-title") || "Embedded video";
+    iframe.loading = "lazy";
+    iframe.setAttribute("frameborder", "0");
+    iframe.setAttribute("allowfullscreen", "");
+    iframe.setAttribute("webkitallowfullscreen", "");
+    iframe.setAttribute("mozallowfullscreen", "");
+    el.parentNode.replaceChild(iframe, el);
+  };
+
+  var loadAllEmbeds = function () {
+    document.querySelectorAll("[data-loom-src]").forEach(buildEmbed);
+  };
+
+  var hideBar = function () {
+    if (cookieBar) cookieBar.hidden = true;
+  };
+
+  if (readConsent()) {
+    loadAllEmbeds();
+  } else {
+    var acceptBtn = document.getElementById("cookie-accept");
+    if (acceptBtn) {
+      acceptBtn.addEventListener("click", function () {
+        storeConsent();
+        hideBar();
+        loadAllEmbeds();
+      });
+    }
+
+    document.querySelectorAll("[data-loom-src]").forEach(function (el) {
+      var loadBtn = el.querySelector(".video-embed__load");
+      if (!loadBtn) return;
+      loadBtn.addEventListener("click", function () {
+        storeConsent();
+        hideBar();
+        buildEmbed(el);
+      });
+    });
+
+    if (cookieBar) cookieBar.hidden = false;
+  }
 })();

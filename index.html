@@ -122,15 +122,15 @@
       <div class="svc-grid">
         <article class="svc-card reveal">
           <div class="svc-card__media">
-            <iframe
-              src="https://www.loom.com/embed/08a48ac62f27461194ec338b5aecf4e5"
-              title="AI Automation overview video"
-              loading="lazy"
-              frameborder="0"
-              webkitallowfullscreen
-              mozallowfullscreen
-              allowfullscreen>
-            </iframe>
+            <div class="video-embed" data-loom-src="https://www.loom.com/embed/08a48ac62f27461194ec338b5aecf4e5" data-loom-title="AI Automation overview video">
+              <button type="button" class="video-embed__load">
+                <span class="video-embed__icon" aria-hidden="true">
+                  <svg width="20" height="20" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M5 3.5v9l7-4.5-7-4.5Z" fill="currentColor"/></svg>
+                </span>
+                <span class="video-embed__label">Click to load video</span>
+                <span class="video-embed__note">Loads a Loom player, which sets cookies</span>
+              </button>
+            </div>
           </div>
           <div class="svc-card__body">
             <div class="svc-card__meta"><span class="tag">AI Automation</span></div>
@@ -270,45 +270,45 @@
       <div class="showcase-grid">
         <article class="showcase-card reveal">
           <div class="showcase-card__media">
-            <iframe
-              src="https://www.loom.com/embed/08a48ac62f27461194ec338b5aecf4e5"
-              title="Speed Up Customer Enquiries demo video"
-              loading="lazy"
-              frameborder="0"
-              webkitallowfullscreen
-              mozallowfullscreen
-              allowfullscreen>
-            </iframe>
+            <div class="video-embed" data-loom-src="https://www.loom.com/embed/08a48ac62f27461194ec338b5aecf4e5" data-loom-title="Speed Up Customer Enquiries demo video">
+              <button type="button" class="video-embed__load">
+                <span class="video-embed__icon" aria-hidden="true">
+                  <svg width="20" height="20" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M5 3.5v9l7-4.5-7-4.5Z" fill="currentColor"/></svg>
+                </span>
+                <span class="video-embed__label">Click to load video</span>
+                <span class="video-embed__note">Loads a Loom player, which sets cookies</span>
+              </button>
+            </div>
           </div>
           <h3>Speed Up Customer Enquiries</h3>
         </article>
 
         <article class="showcase-card reveal">
           <div class="showcase-card__media">
-            <iframe
-              src="https://www.loom.com/embed/efad1e471b05404ca0a6d3a9377a7716"
-              title="Document Screening demo video"
-              loading="lazy"
-              frameborder="0"
-              webkitallowfullscreen
-              mozallowfullscreen
-              allowfullscreen>
-            </iframe>
+            <div class="video-embed" data-loom-src="https://www.loom.com/embed/efad1e471b05404ca0a6d3a9377a7716" data-loom-title="Document Screening demo video">
+              <button type="button" class="video-embed__load">
+                <span class="video-embed__icon" aria-hidden="true">
+                  <svg width="20" height="20" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M5 3.5v9l7-4.5-7-4.5Z" fill="currentColor"/></svg>
+                </span>
+                <span class="video-embed__label">Click to load video</span>
+                <span class="video-embed__note">Loads a Loom player, which sets cookies</span>
+              </button>
+            </div>
           </div>
           <h3>Document Screening</h3>
         </article>
 
         <article class="showcase-card reveal">
           <div class="showcase-card__media">
-            <iframe
-              src="https://www.loom.com/embed/bb27ded42e94466483ea2d057032b3e2"
-              title="Scheduling demo video"
-              loading="lazy"
-              frameborder="0"
-              webkitallowfullscreen
-              mozallowfullscreen
-              allowfullscreen>
-            </iframe>
+            <div class="video-embed" data-loom-src="https://www.loom.com/embed/bb27ded42e94466483ea2d057032b3e2" data-loom-title="Scheduling demo video">
+              <button type="button" class="video-embed__load">
+                <span class="video-embed__icon" aria-hidden="true">
+                  <svg width="20" height="20" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M5 3.5v9l7-4.5-7-4.5Z" fill="currentColor"/></svg>
+                </span>
+                <span class="video-embed__label">Click to load video</span>
+                <span class="video-embed__note">Loads a Loom player, which sets cookies</span>
+              </button>
+            </div>
           </div>
           <h3>Scheduling</h3>
         </article>
@@ -435,9 +435,16 @@
       <a href="mailto:tom@avora-systems.com">tom@avora-systems.com</a>
       <a href="https://www.linkedin.com/in/tom-bennett-b8b385425/" target="_blank" rel="noopener">LinkedIn</a>
     </div>
-    <span class="footer__copy">&copy; 2026 Avora Systems LTD. All rights reserved. &middot; <a href="privacy.html">Privacy Policy</a></span>
+    <span class="footer__copy">&copy; 2026 Avora Systems LTD. All rights reserved. &middot; <a href="privacy.html">Privacy Policy</a> &middot; <a href="terms.html">Terms &amp; Conditions</a> &middot; <a href="refund-policy.html">Refund Policy</a> &middot; <a href="cookies.html">Cookie Policy</a></span>
   </div>
 </footer>
+
+<div class="cookie-bar" id="cookie-bar" role="region" aria-label="Cookie consent" hidden>
+  <div class="wrap cookie-bar__inner">
+    <p class="cookie-bar__text">This site uses cookies for embedded video content. Accept? <a href="cookies.html">Cookie Policy</a></p>
+    <button type="button" class="cookie-bar__btn" id="cookie-accept">Accept</button>
+  </div>
+</div>
 
 <script src="js/script.js"></script>
 </body>
