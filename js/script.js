@@ -67,29 +67,46 @@
   }
 
   /* ----------------------------------------------------------
-     Scroll-triggered reveal animations
+     Scroll-triggered reveal animations (GSAP ScrollTrigger)
+
+     Elements marked .reveal fade and rise into view as they enter
+     the viewport. ScrollTrigger.batch groups elements that appear
+     together and staggers them, replacing the old per-element
+     nth-child transition delays.
+
+     Fallback: if GSAP fails to load (e.g. CDN blocked) or the
+     visitor prefers reduced motion, every .reveal is shown at once
+     via the .is-visible class.
      ---------------------------------------------------------- */
   var revealEls = document.querySelectorAll(".reveal");
+  var gsapReady = typeof window.gsap !== "undefined" && typeof window.ScrollTrigger !== "undefined";
 
-  if (reduceMotion || !("IntersectionObserver" in window)) {
+  if (reduceMotion || !gsapReady) {
     revealEls.forEach(function (el) {
       el.classList.add("is-visible");
     });
   } else {
-    var observer = new IntersectionObserver(
-      function (entries) {
-        entries.forEach(function (entry) {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("is-visible");
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.15, rootMargin: "0px 0px -60px 0px" }
-    );
+    gsap.registerPlugin(ScrollTrigger);
+    gsap.set(revealEls, { opacity: 0, y: 24 });
 
-    revealEls.forEach(function (el) {
-      observer.observe(el);
+    ScrollTrigger.batch(".reveal", {
+      start: "top 88%",
+      once: true,
+      onEnter: function (batch) {
+        gsap.to(batch, {
+          opacity: 1,
+          y: 0,
+          duration: 0.7,
+          ease: "power2.out",
+          stagger: 0.09,
+          overwrite: true
+        });
+      }
+    });
+
+    // Recalculate trigger positions once late-loading images settle.
+    window.addEventListener("load", function () {
+      ScrollTrigger.refresh();
     });
   }
 
