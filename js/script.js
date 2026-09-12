@@ -198,70 +198,217 @@
   }
 
   /* ----------------------------------------------------------
-     Cookie consent + gated video embeds
-     Loom iframes are not loaded until the visitor accepts.
-     Until then, each embed shows a "Click to load video"
-     placeholder. The choice is remembered in localStorage.
+     Scroll progress bar
      ---------------------------------------------------------- */
-  var CONSENT_KEY = "avora-cookie-consent";
-  var cookieBar = document.getElementById("cookie-bar");
+  var progressBar = document.getElementById("progress-bar");
 
-  var readConsent = function () {
-    try {
-      return window.localStorage.getItem(CONSENT_KEY) === "accepted";
-    } catch (e) {
-      return false;
-    }
-  };
+  if (progressBar) {
+    var updateProgress = function () {
+      var doc = document.documentElement;
+      var max = doc.scrollHeight - doc.clientHeight;
+      var pct = max > 0 ? (doc.scrollTop / max) * 100 : 0;
+      progressBar.style.width = pct + "%";
+    };
+    updateProgress();
+    window.addEventListener("scroll", updateProgress, { passive: true });
+    window.addEventListener("resize", updateProgress);
+  }
 
-  var storeConsent = function () {
-    try {
-      window.localStorage.setItem(CONSENT_KEY, "accepted");
-    } catch (e) {}
-  };
+  /* ----------------------------------------------------------
+     Custom cursor (desktop, fine pointer, motion allowed only)
+     ---------------------------------------------------------- */
+  var canUseFineCursor =
+    !reduceMotion && window.matchMedia("(hover: hover) and (pointer: fine)").matches;
 
-  var buildEmbed = function (el) {
-    var iframe = document.createElement("iframe");
-    iframe.src = el.getAttribute("data-loom-src");
-    iframe.title = el.getAttribute("data-loom-title") || "Embedded video";
-    iframe.loading = "lazy";
-    iframe.setAttribute("frameborder", "0");
-    iframe.setAttribute("allowfullscreen", "");
-    iframe.setAttribute("webkitallowfullscreen", "");
-    iframe.setAttribute("mozallowfullscreen", "");
-    el.parentNode.replaceChild(iframe, el);
-  };
+  if (canUseFineCursor) {
+    var cursorDot = document.getElementById("cursor-dot");
+    var cursorRing = document.getElementById("cursor-ring");
 
-  var loadAllEmbeds = function () {
-    document.querySelectorAll("[data-loom-src]").forEach(buildEmbed);
-  };
+    if (cursorDot && cursorRing) {
+      document.documentElement.classList.add("has-custom-cursor");
 
-  var hideBar = function () {
-    if (cookieBar) cookieBar.hidden = true;
-  };
+      var ringX = 0,
+        ringY = 0,
+        mouseX = 0,
+        mouseY = 0;
 
-  if (readConsent()) {
-    loadAllEmbeds();
-  } else {
-    var acceptBtn = document.getElementById("cookie-accept");
-    if (acceptBtn) {
-      acceptBtn.addEventListener("click", function () {
-        storeConsent();
-        hideBar();
-        loadAllEmbeds();
+      window.addEventListener(
+        "mousemove",
+        function (e) {
+          mouseX = e.clientX;
+          mouseY = e.clientY;
+          cursorDot.style.transform = "translate(" + mouseX + "px," + mouseY + "px)";
+        },
+        { passive: true }
+      );
+
+      var tickCursor = function () {
+        ringX += (mouseX - ringX) * 0.18;
+        ringY += (mouseY - ringY) * 0.18;
+        cursorRing.style.transform = "translate(" + ringX + "px," + ringY + "px)";
+        requestAnimationFrame(tickCursor);
+      };
+      requestAnimationFrame(tickCursor);
+
+      var hoverTargets = "a, button, .styles-track, [data-glow], [data-magnetic]";
+      document.addEventListener("mouseover", function (e) {
+        if (e.target.closest(hoverTargets)) cursorRing.classList.add("is-active");
+      });
+      document.addEventListener("mouseout", function (e) {
+        if (e.target.closest(hoverTargets)) cursorRing.classList.remove("is-active");
       });
     }
+  }
 
-    document.querySelectorAll("[data-loom-src]").forEach(function (el) {
-      var loadBtn = el.querySelector(".video-embed__load");
-      if (!loadBtn) return;
-      loadBtn.addEventListener("click", function () {
-        storeConsent();
-        hideBar();
-        buildEmbed(el);
+  /* ----------------------------------------------------------
+     Magnetic buttons — CTA nudges toward the cursor on hover
+     ---------------------------------------------------------- */
+  if (!reduceMotion) {
+    document.querySelectorAll("[data-magnetic]").forEach(function (el) {
+      el.addEventListener("mousemove", function (e) {
+        var rect = el.getBoundingClientRect();
+        var x = e.clientX - rect.left - rect.width / 2;
+        var y = e.clientY - rect.top - rect.height / 2;
+        el.style.transform = "translate(" + x * 0.28 + "px," + y * 0.4 + "px)";
+      });
+      el.addEventListener("mouseleave", function () {
+        el.style.transform = "";
       });
     });
+  }
 
-    if (cookieBar) cookieBar.hidden = false;
+  /* ----------------------------------------------------------
+     Cursor-tracked glow on cards ([data-glow])
+     ---------------------------------------------------------- */
+  if (!reduceMotion && window.matchMedia("(hover: hover)").matches) {
+    document.querySelectorAll("[data-glow]").forEach(function (el) {
+      el.addEventListener("mousemove", function (e) {
+        var rect = el.getBoundingClientRect();
+        el.style.setProperty("--mx", ((e.clientX - rect.left) / rect.width) * 100 + "%");
+        el.style.setProperty("--my", ((e.clientY - rect.top) / rect.height) * 100 + "%");
+      });
+    });
+  }
+
+  /* ----------------------------------------------------------
+     Hero image tilt (subtle 3D parallax toward the cursor)
+     ---------------------------------------------------------- */
+  var heroMedia = document.querySelector(".hero__media[data-tilt]");
+  var heroSection = document.querySelector(".hero");
+
+  if (heroMedia && heroSection && !reduceMotion && window.matchMedia("(hover: hover)").matches) {
+    heroSection.addEventListener("mousemove", function (e) {
+      var rect = heroSection.getBoundingClientRect();
+      var px = (e.clientX - rect.left) / rect.width - 0.5;
+      var py = (e.clientY - rect.top) / rect.height - 0.5;
+      heroMedia.style.transform =
+        "rotateY(" + px * 10 + "deg) rotateX(" + py * -10 + "deg)";
+    });
+    heroSection.addEventListener("mouseleave", function () {
+      heroMedia.style.transform = "";
+    });
+  }
+
+  /* ----------------------------------------------------------
+     Illustrative animated demos (flow / chat / document / calendar)
+     Play once when scrolled into view. Pure CSS/GSAP — no video,
+     no third-party embeds, no cookies required.
+     ---------------------------------------------------------- */
+  var canAnimateDemos = gsapReady;
+
+  var playChatDemo = function (root) {
+    var lead = root.querySelector('[data-chat-el="lead"]');
+    var typing = root.querySelector('[data-chat-el="typing"]');
+    var reply = root.querySelector('[data-chat-el="reply"]');
+    var tag = root.querySelector('[data-chat-el="tag"]');
+    if (!lead) return;
+
+    if (!canAnimateDemos) {
+      [lead, typing, reply, tag].forEach(function (el) {
+        if (el) {
+          el.style.opacity = 1;
+          el.style.transform = "none";
+        }
+      });
+      if (typing) typing.style.display = "none";
+      return;
+    }
+
+    var tl = gsap.timeline({ delay: 0.2 });
+    tl.to(lead, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" })
+      .to(typing, { opacity: 1, y: 0, duration: 0.35, ease: "power2.out" }, "+=0.5")
+      .to(typing, { opacity: 0, duration: 0.25 }, "+=0.9")
+      .to(reply, { opacity: 1, y: 0, duration: 0.45, ease: "power2.out" }, "<")
+      .to(tag, { opacity: 1, duration: 0.4 }, "-=0.1");
+  };
+
+  var playDocDemo = function (root) {
+    var checks = [
+      root.querySelector('[data-doc-el="check1"]'),
+      root.querySelector('[data-doc-el="check2"]'),
+      root.querySelector('[data-doc-el="check3"]')
+    ].filter(Boolean);
+
+    if (!canAnimateDemos) {
+      checks.forEach(function (el) {
+        el.classList.add("is-done");
+      });
+      return;
+    }
+
+    var tl = gsap.timeline({ delay: 0.3 });
+    checks.forEach(function (el, i) {
+      tl.call(
+        function () {
+          el.classList.add("is-done");
+        },
+        null,
+        i === 0 ? 0.4 : "+=0.5"
+      );
+    });
+  };
+
+  var playCalDemo = function (root) {
+    var slot = root.querySelector('[data-cal-el="slot"]');
+    var confirm = root.querySelector('[data-cal-el="confirm"]');
+    if (!slot) return;
+
+    if (!canAnimateDemos) {
+      slot.classList.add("is-confirmed");
+      if (confirm) {
+        confirm.style.opacity = 1;
+        confirm.style.transform = "none";
+      }
+      return;
+    }
+
+    var tl = gsap.timeline({ delay: 0.4 });
+    tl.call(function () {
+      slot.classList.add("is-confirmed");
+    }, null, 0.6).to(confirm, { opacity: 1, y: 0, duration: 0.45, ease: "power2.out" }, "-=0.1");
+  };
+
+  var demoPlayers = { chat: playChatDemo, doc: playDocDemo, cal: playCalDemo };
+  var demoEls = document.querySelectorAll("[data-demo]");
+
+  if (demoEls.length) {
+    if (gsapReady) {
+      demoEls.forEach(function (el) {
+        ScrollTrigger.create({
+          trigger: el,
+          start: "top 80%",
+          once: true,
+          onEnter: function () {
+            var player = demoPlayers[el.getAttribute("data-demo")];
+            if (player) player(el);
+          }
+        });
+      });
+    } else {
+      demoEls.forEach(function (el) {
+        var player = demoPlayers[el.getAttribute("data-demo")];
+        if (player) player(el);
+      });
+    }
   }
 })();
