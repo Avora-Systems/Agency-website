@@ -2,7 +2,7 @@
 
 ## Project
 
-**Avora Systems** marketing site — a single-page static site for a UK small-business agency offering AI automation (lead response, document handling, scheduling, invoicing) and website building. Primary call to action throughout is booking a free automation audit via Calendly.
+**Avora Systems** marketing site — a single-page static site for a UK small-business agency offering AI automation (lead response, document handling, scheduling, invoicing) and website building. Primary call to action throughout is booking a free automation audit by scrolling to the contact form, which feeds an AI scheduling automation.
 
 ## Stack
 
@@ -19,7 +19,7 @@
 ## Key integrations
 
 - **Contact form** (`js/script.js`): posts JSON (`name`, `email`, `message`, `source`) to an n8n webhook at `https://n8n-production-7a6e1.up.railway.app/webhook/...`. No server code in this repo — the webhook is external.
-- **Booking CTA**: links to a Calendly page (`calendly.com/tom-avora-systems/free-automation-audit-call`). Primary CTAs (hero, mid-page CTA section) render as a filled pill `.btn.btn--primary` with a magnetic hover pull; secondary/nav links keep the understated animated-underline `.text-link` style.
+- **Booking CTA**: scrolls to the `#contact` form (in-page anchor, or `index.html#contact` from the legal pages), which feeds an AI scheduling automation rather than an external booking tool. Primary CTAs (hero, mid-page CTA section) render as a filled pill `.btn.btn--primary` with a magnetic hover pull; secondary/nav links keep the understated animated-underline `.text-link` style.
 - **No video embeds**: the site no longer embeds Loom (or any third-party) video. The "What we build" AI Automation card and the "See it in action" section instead use small illustrative animations built from HTML/CSS/GSAP — an enquiry→AI→reply "flow" diagram, a chat-reply demo, a document-checklist demo, and a scheduling/calendar demo (`.flow-demo`, `.chat-demo`, `.doc-demo`, `.cal-demo` in `css/styles.css`, played once on scroll-into-view via `ScrollTrigger.create` in `js/script.js`). Because there's no embedded third-party content, the site sets no non-essential cookies and there is no cookie-consent bar — `cookies.html` reflects this.
 
 ## Conventions
