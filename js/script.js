@@ -250,7 +250,7 @@
       };
       requestAnimationFrame(tickCursor);
 
-      var hoverTargets = "a, button, .styles-track, [data-glow], [data-magnetic]";
+      var hoverTargets = "a, button, [data-glow], [data-magnetic], .avora-core";
       document.addEventListener("mouseover", function (e) {
         if (e.target.closest(hoverTargets)) cursorRing.classList.add("is-active");
       });
@@ -291,22 +291,284 @@
   }
 
   /* ----------------------------------------------------------
-     Hero image tilt (subtle 3D parallax toward the cursor)
-     ---------------------------------------------------------- */
-  var heroMedia = document.querySelector(".hero__media[data-tilt]");
-  var heroSection = document.querySelector(".hero");
+     Hero title entrance — masked line reveal (GSAP SplitText)
 
-  if (heroMedia && heroSection && !reduceMotion && window.matchMedia("(hover: hover)").matches) {
-    heroSection.addEventListener("mousemove", function (e) {
-      var rect = heroSection.getBoundingClientRect();
-      var px = (e.clientX - rect.left) / rect.width - 0.5;
-      var py = (e.clientY - rect.top) / rect.height - 0.5;
-      heroMedia.style.transform =
-        "rotateY(" + px * 10 + "deg) rotateX(" + py * -10 + "deg)";
+     Plays once on load rather than on scroll-into-view, since the
+     hero is always in view at load. Falls back to the title's
+     default (fully visible, unsplit) markup if GSAP/SplitText
+     didn't load or the visitor prefers reduced motion.
+     ---------------------------------------------------------- */
+  var heroTitle = document.querySelector("[data-split-mask]");
+  var SplitTextPlugin = window.SplitText;
+
+  if (heroTitle && gsapReady && SplitTextPlugin && !reduceMotion) {
+    gsap.registerPlugin(SplitTextPlugin);
+    var heroSplit = new SplitTextPlugin(heroTitle, { type: "lines", mask: "lines" });
+    gsap.set(heroSplit.lines, { yPercent: 110 });
+    gsap.to(heroSplit.lines, {
+      yPercent: 0,
+      duration: 1,
+      ease: "power3.out",
+      stagger: 0.08,
+      delay: 0.15
     });
-    heroSection.addEventListener("mouseleave", function () {
-      heroMedia.style.transform = "";
+  }
+
+  /* ----------------------------------------------------------
+     Avora System hero: pin the hero while its scroll choreography
+     plays, dispatching progress for the React island mounted in
+     #avora-hero-root (see src/hero). Matches exactly the criteria
+     HeroExperience uses itself to choose scroll-pin vs. autoplay
+     (see useIsDesktopViewport there) — width AND a height check.
+
+     The height check matters: ScrollTrigger pins via
+     `position: fixed`, which clips to the viewport regardless of
+     the pinned element's own height. On short/laptop viewports the
+     hero's natural content (headline, CTA, stats) can be taller
+     than the viewport, which would silently make the CTA
+     unreachable for the whole pin duration. Skipping the pin there
+     leaves the hero to scroll normally instead — HeroExperience
+     falls back to its autoplay sequence in that case.
+     ---------------------------------------------------------- */
+  var heroSection = document.getElementById("top");
+  var avoraHeroRoot = document.getElementById("avora-hero-root");
+  var isDesktopViewport = window.matchMedia("(min-width: 921px)").matches;
+  var heroFitsViewport = heroSection && heroSection.offsetHeight <= window.innerHeight;
+
+  if (heroSection && avoraHeroRoot && gsapReady && !reduceMotion && isDesktopViewport && heroFitsViewport) {
+    ScrollTrigger.create({
+      trigger: heroSection,
+      start: "top top",
+      end: "+=100%",
+      pin: true,
+      pinSpacing: true,
+      scrub: 0.4,
+      onUpdate: function (self) {
+        window.dispatchEvent(new CustomEvent("avora:hero-progress", { detail: self.progress }));
+      }
     });
+  }
+
+  /* ----------------------------------------------------------
+     How it works: one small system diagram, pinned and
+     transformed by scroll rather than three unrelated icons —
+     scattered inputs (01) -> connected (02) -> flowing (03).
+     ---------------------------------------------------------- */
+  var howSection = document.getElementById("how-it-works");
+  var diagram = howSection && howSection.querySelector("[data-diagram]");
+  var howFitsViewport = howSection && howSection.offsetHeight <= window.innerHeight;
+
+  if (howSection && diagram && gsapReady && !reduceMotion && isDesktopViewport && howFitsViewport && window.DrawSVGPlugin) {
+    gsap.registerPlugin(window.DrawSVGPlugin, window.MotionPathPlugin);
+
+    var diagramLines = diagram.querySelectorAll("[data-diagram-line]");
+    var diagramScatter = diagram.querySelectorAll("[data-diagram-scatter]");
+    var diagramHubs = diagram.querySelectorAll("[data-diagram-hub]");
+    var diagramFlow = diagram.querySelectorAll("[data-diagram-flow]");
+    var stepEls = howSection.querySelectorAll(".step");
+    var mapAndClamp = function (inMin, inMax, outMin, outMax, value) {
+      var mapped = gsap.utils.mapRange(inMin, inMax, outMin, outMax, value);
+      return gsap.utils.clamp(Math.min(outMin, outMax), Math.max(outMin, outMax), mapped);
+    };
+
+    gsap.set(diagramLines, { drawSVG: "0%" });
+    gsap.set(diagramHubs, { opacity: 0.3 });
+    gsap.set(diagramFlow, { opacity: 0 });
+
+    var flowTl = gsap.timeline({ repeat: -1, paused: true });
+    diagramFlow.forEach(function (dot, i) {
+      flowTl.fromTo(
+        dot,
+        { motionPath: { path: diagramLines[i], align: diagramLines[i], alignOrigin: [0.5, 0.5], start: 0, end: 0 } },
+        { motionPath: { path: diagramLines[i], align: diagramLines[i], alignOrigin: [0.5, 0.5], start: 0, end: 1 }, duration: 1.4, ease: "power1.inOut" },
+        i * 0.35
+      );
+    });
+
+    ScrollTrigger.create({
+      trigger: howSection,
+      start: "top top",
+      end: "+=90%",
+      pin: true,
+      scrub: 0.5,
+      onUpdate: function (self) {
+        var p = self.progress;
+        var activeStep = p < 0.34 ? 0 : p < 0.67 ? 1 : 2;
+
+        stepEls.forEach(function (el, i) {
+          el.classList.toggle("is-active", i === activeStep);
+        });
+
+        var lit = mapAndClamp(0.15, 0.55, 0, 1, p);
+        gsap.set(diagramScatter, { opacity: 1 - mapAndClamp(0, 0.3, 0, 1, p) });
+        gsap.set(diagramLines, { drawSVG: mapAndClamp(0.22, 0.62, 0, 100, p) + "%" });
+        gsap.set(diagramHubs, {
+          borderColor: gsap.utils.interpolate("#d9dce2", "#2563eb", lit),
+          backgroundColor: gsap.utils.interpolate("#ffffff", "#2563eb", lit)
+        });
+
+        var flowOpacity = mapAndClamp(0.62, 0.78, 0, 1, p);
+        gsap.set(diagramFlow, { opacity: flowOpacity });
+        if (flowOpacity > 0 && flowTl.paused()) flowTl.play();
+        if (flowOpacity === 0 && !flowTl.paused()) flowTl.pause(0);
+      }
+    });
+  }
+
+  /* ----------------------------------------------------------
+     Automation examples: one system, switched between rather
+     than five unrelated cards. Progressive enhancement — the
+     tabs are hidden and every example shown in full (the
+     original design) until this runs.
+     ---------------------------------------------------------- */
+  var buildSwitcher = document.querySelector("[data-build-switcher]");
+
+  if (buildSwitcher) {
+    var buildTabs = Array.prototype.slice.call(buildSwitcher.querySelectorAll("[data-build-tab]"));
+    var buildItems = Array.prototype.slice.call(buildSwitcher.querySelectorAll("[data-build-item]"));
+
+    if (buildTabs.length && buildItems.length) {
+      buildSwitcher.classList.add("is-enhanced");
+      var buildTablist = buildSwitcher.querySelector(".build-switcher__tabs");
+      if (buildTablist) buildTablist.setAttribute("role", "tablist");
+
+      buildTabs.forEach(function (tab, i) {
+        var panel = buildItems[i];
+        tab.setAttribute("role", "tab");
+        tab.setAttribute("aria-selected", tab.classList.contains("is-active") ? "true" : "false");
+        if (panel) tab.setAttribute("aria-controls", panel.id);
+        if (panel) panel.setAttribute("role", "tabpanel");
+
+        tab.addEventListener("click", function (e) {
+          e.preventDefault();
+          buildTabs.forEach(function (t) {
+            t.classList.remove("is-active");
+            t.setAttribute("aria-selected", "false");
+          });
+          buildItems.forEach(function (item) {
+            item.classList.remove("is-active");
+          });
+          tab.classList.add("is-active");
+          tab.setAttribute("aria-selected", "true");
+          if (panel) panel.classList.add("is-active");
+        });
+      });
+    }
+  }
+
+  /* ----------------------------------------------------------
+     Website design showcase: four fully coded concept sites in one
+     browser frame. Two independent layers of state:
+       - which CONCEPT is showing (the four tabs)
+       - which PAGE within that concept is showing (the dots)
+     Each concept remembers nothing between visits — switching back
+     to a concept always resets it to its first page, which keeps
+     the interaction simple and predictable rather than stateful.
+     ---------------------------------------------------------- */
+  var showcase = document.querySelector("[data-showcase]");
+
+  if (showcase) {
+    var showcaseTabs = Array.prototype.slice.call(showcase.querySelectorAll("[data-showcase-tab]"));
+    var showcaseConcepts = Array.prototype.slice.call(showcase.querySelectorAll("[data-showcase-concept]"));
+    var showcaseUrlEl = showcase.querySelector("[data-showcase-url]");
+
+    // The four mockups' own nav/CTA links (href="#") are illustrative —
+    // they're not real navigation. Stop them from jumping the real page
+    // to the top or touching the URL hash. A single delegated listener on
+    // the frame catches both mouse clicks and keyboard-triggered clicks
+    // (Enter on a focused link fires the same "click" event), so this
+    // doesn't change what's focusable or how tabbing through them works.
+    var showcaseFrame = showcase.querySelector(".showcase-demo__frame");
+    if (showcaseFrame) {
+      showcaseFrame.addEventListener("click", function (e) {
+        var link = e.target.closest("a");
+        if (link) e.preventDefault();
+      });
+    }
+    var showcaseAutoplayMs = 5200;
+    var showcaseAutoplayTimer = null;
+
+    var goToPage = function (concept, pageIndex) {
+      var pages = Array.prototype.slice.call(concept.querySelectorAll("[data-concept-page]"));
+      var dots = Array.prototype.slice.call(concept.querySelectorAll("[data-concept-dots] button"));
+      pages.forEach(function (page, i) {
+        page.classList.toggle("is-active", i === pageIndex);
+      });
+      dots.forEach(function (dot, i) {
+        dot.classList.toggle("is-active", i === pageIndex);
+      });
+      return pages.length;
+    };
+
+    var stopAutoplay = function () {
+      if (showcaseAutoplayTimer) {
+        clearInterval(showcaseAutoplayTimer);
+        showcaseAutoplayTimer = null;
+      }
+    };
+
+    var startAutoplay = function (concept) {
+      stopAutoplay();
+      if (reduceMotion) return;
+      var current = 0;
+      showcaseAutoplayTimer = setInterval(function () {
+        var dots = concept.querySelectorAll("[data-concept-dots] button");
+        current = (current + 1) % dots.length;
+        goToPage(concept, current);
+      }, showcaseAutoplayMs);
+    };
+
+    showcaseConcepts.forEach(function (concept) {
+      var dots = Array.prototype.slice.call(concept.querySelectorAll("[data-concept-dots] button"));
+      dots.forEach(function (dot, i) {
+        dot.addEventListener("click", function () {
+          goToPage(concept, i);
+          if (concept.classList.contains("is-active")) startAutoplay(concept);
+        });
+      });
+    });
+
+    showcaseTabs.forEach(function (tab) {
+      tab.setAttribute("aria-selected", tab.classList.contains("is-active") ? "true" : "false");
+
+      tab.addEventListener("click", function () {
+        var targetId = tab.getAttribute("data-showcase-tab");
+        if (tab.classList.contains("is-active")) return;
+
+        showcaseTabs.forEach(function (t) {
+          t.classList.remove("is-active");
+          t.setAttribute("aria-selected", "false");
+        });
+        tab.classList.add("is-active");
+        tab.setAttribute("aria-selected", "true");
+
+        showcaseConcepts.forEach(function (concept) {
+          var isTarget = concept.getAttribute("data-showcase-concept") === targetId;
+          concept.classList.toggle("is-active", isTarget);
+          concept.setAttribute("aria-hidden", isTarget ? "false" : "true");
+          if (isTarget) {
+            goToPage(concept, 0);
+            if (showcaseUrlEl) showcaseUrlEl.textContent = concept.getAttribute("data-url") || "";
+            startAutoplay(concept);
+          }
+        });
+      });
+    });
+
+    showcaseConcepts.forEach(function (concept) {
+      goToPage(concept, 0);
+    });
+
+    var activeConcept = showcase.querySelector("[data-showcase-concept].is-active");
+    if (activeConcept) {
+      startAutoplay(activeConcept);
+      showcase.addEventListener("mouseenter", stopAutoplay);
+      showcase.addEventListener("mouseleave", function () {
+        var current = showcase.querySelector("[data-showcase-concept].is-active");
+        if (current) startAutoplay(current);
+      });
+      showcase.addEventListener("focusin", stopAutoplay);
+    }
   }
 
   /* ----------------------------------------------------------

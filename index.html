@@ -9,6 +9,8 @@
 <link rel="preload" as="font" type="font/woff2" href="fonts/schibsted-grotesk-latin.woff2" crossorigin>
 <link rel="preload" as="font" type="font/woff2" href="fonts/inter-latin.woff2" crossorigin>
 <link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="css/showcase.css">
+<link rel="stylesheet" href="app-dist/avora-app.css">
 </head>
 <body>
 
@@ -54,7 +56,7 @@
     <div class="wrap hero__inner">
       <div class="hero__col">
         <span class="hero__eyebrow reveal">AI Automation &amp; Websites for Small UK Businesses</span>
-        <h1 class="hero__title reveal">Less admin, faster replies, and <span class="accent-phrase">more time to run your business.</span></h1>
+        <h1 class="hero__title" data-split-mask>Less admin, faster replies, and <span class="accent-phrase">more time to run your business.</span></h1>
         <p class="hero__sub reveal">We build AI automation and modern websites that clear the busywork, so leads get answered in minutes, not days.</p>
         <div class="hero__actions reveal">
           <a class="btn btn--primary" data-magnetic href="#contact">
@@ -78,15 +80,60 @@
           </div>
         </dl>
       </div>
-      <div class="hero__media reveal" data-tilt>
-        <img src="images/hero-workspace.jpg" alt="" width="933" height="1200" fetchpriority="high">
+      <div class="hero__media reveal">
         <span class="hero__media-glow" aria-hidden="true"></span>
-        <span class="hero__media-chip hero__media-chip--top">
-          <span class="hero__media-dot"></span> Lead auto-replied
-        </span>
-        <span class="hero__media-chip hero__media-chip--bottom">
-          <span class="hero__media-dot"></span> Booking confirmed
-        </span>
+        <!-- The Avora System: a small React island (see src/hero) mounts here
+             — plain DOM/CSS, no WebGL, so it mounts on every viewport. What
+             follows is the no-JS fallback: a static snapshot of the resolved
+             ("booking confirmed") state, left in place if this never mounts. -->
+        <div id="avora-hero-root">
+          <div class="avora-core">
+            <div class="avora-system no-motion" aria-hidden="true">
+              <svg class="avora-system__lines" viewBox="0 0 100 100" preserveAspectRatio="none">
+                <line x1="50" y1="43" x2="7" y2="12" />
+                <line x1="50" y1="43" x2="93" y2="22" />
+                <line x1="50" y1="43" x2="90" y2="60" />
+                <line x1="50" y1="43" x2="10" y2="63" />
+              </svg>
+              <div class="avora-system__module" style="left: 50%; top: 43%;">
+                <span class="avora-system__module-mark">AVORA</span>
+                <span class="avora-system__module-line">Complete</span>
+              </div>
+              <div class="avora-system__card avora-system__card--enquiry is-muted" style="left: 7%; top: 12%;">
+                <span class="avora-system__card-title">Website enquiry
+                  <svg class="avora-system__card-check" width="11" height="11" viewBox="0 0 16 16" fill="none"><path d="M3.5 8.5 6.5 11.5 12.5 4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </span>
+                <span class="avora-system__card-line">&ldquo;Could you quote for a bathroom re-fit?&rdquo;</span>
+              </div>
+              <div class="avora-system__card avora-system__card--crm is-muted" style="left: 93%; top: 22%;">
+                <span class="avora-system__card-title">CRM
+                  <svg class="avora-system__card-check" width="11" height="11" viewBox="0 0 16 16" fill="none"><path d="M3.5 8.5 6.5 11.5 12.5 4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </span>
+                <span class="avora-system__card-line"><b>Lead</b>James Carter</span>
+              </div>
+              <div class="avora-system__card avora-system__card--calendar is-muted" style="left: 90%; top: 60%;">
+                <span class="avora-system__card-title">Calendar
+                  <svg class="avora-system__card-check" width="11" height="11" viewBox="0 0 16 16" fill="none"><path d="M3.5 8.5 6.5 11.5 12.5 4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </span>
+                <span class="avora-system__card-line"><b>Tuesday</b>10:30 AM</span>
+              </div>
+              <div class="avora-system__card avora-system__card--response is-active" style="left: 10%; top: 63%;">
+                <span class="avora-system__card-title">AI response</span>
+                <span class="avora-system__card-line"><b>Draft</b>Ready to send</span>
+              </div>
+              <div class="avora-system__tags">
+                <span>Enquiry</span><span>Email</span><span>WhatsApp</span><span>AI</span><span>CRM</span><span>Calendar</span><span>Invoicing</span><span>Documents</span>
+              </div>
+            </div>
+            <div class="avora-core__status">
+              <span class="avora-core__status-dot" aria-hidden="true"></span>
+              <span class="avora-core__status-text">
+                <strong>Booking confirmed</strong>
+                <span>Reply sent &middot; CRM updated</span>
+              </span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -109,6 +156,23 @@
       <div class="section-head reveal">
         <h2 id="how-heading">How it works</h2>
         <p class="section-lede">From first call to full automation, in three steps.</p>
+      </div>
+
+      <div class="how-diagram reveal" data-diagram aria-hidden="true">
+        <svg class="how-diagram__lines" viewBox="0 0 100 20" preserveAspectRatio="none">
+          <path data-diagram-line d="M16.67 10 L50 10" />
+          <path data-diagram-line d="M50 10 L83.33 10" />
+        </svg>
+        <span class="how-diagram__dot how-diagram__dot--scatter" data-diagram-scatter style="left: 9%; top: 20%;"></span>
+        <span class="how-diagram__dot how-diagram__dot--scatter" data-diagram-scatter style="left: 6%; top: 60%;"></span>
+        <span class="how-diagram__dot how-diagram__dot--scatter" data-diagram-scatter style="left: 13%; top: 80%;"></span>
+        <span class="how-diagram__dot how-diagram__dot--scatter" data-diagram-scatter style="left: 22%; top: 30%;"></span>
+        <span class="how-diagram__dot how-diagram__dot--scatter" data-diagram-scatter style="left: 24%; top: 75%;"></span>
+        <span class="how-diagram__dot how-diagram__dot--flow" data-diagram-flow style="left: 16.67%; top: 50%;"></span>
+        <span class="how-diagram__dot how-diagram__dot--flow" data-diagram-flow style="left: 50%; top: 50%;"></span>
+        <span class="how-diagram__dot how-diagram__dot--hub" data-diagram-hub style="left: 16.67%; top: 50%;"></span>
+        <span class="how-diagram__dot how-diagram__dot--hub" data-diagram-hub style="left: 50%; top: 50%;"></span>
+        <span class="how-diagram__dot how-diagram__dot--hub" data-diagram-hub style="left: 83.33%; top: 50%;"></span>
       </div>
 
       <div class="steps">
@@ -140,16 +204,28 @@
 
       <div class="problem-list">
         <article class="problem-row reveal">
-          <h3>Slow lead response</h3>
-          <p>A prospect enquires and hears nothing back for hours, sometimes days. By the time you reply, they have already gone with a competitor who answered first.</p>
+          <span class="problem-row__n">01</span>
+          <div class="problem-row__body">
+            <h3>Slow lead response</h3>
+            <p>A prospect enquires and hears nothing back for hours, sometimes days. By the time you reply, they have already gone with a competitor who answered first.</p>
+          </div>
+          <span class="problem-row__cost">Lost to a faster reply</span>
         </article>
         <article class="problem-row reveal">
-          <h3>Manual document &amp; application handling</h3>
-          <p>Forms, contracts and applications get copied by hand between inboxes, spreadsheets and systems: slow, repetitive, and one typo away from a real problem.</p>
+          <span class="problem-row__n">02</span>
+          <div class="problem-row__body">
+            <h3>Manual document &amp; application handling</h3>
+            <p>Forms, contracts and applications get copied by hand between inboxes, spreadsheets and systems: slow, repetitive, and one typo away from a real problem.</p>
+          </div>
+          <span class="problem-row__cost">An afternoon, gone</span>
         </article>
         <article class="problem-row reveal">
-          <h3>Scheduling back-and-forth</h3>
-          <p>"Does Tuesday work?" "Actually, how about Thursday?" Booking a single meeting should not take six emails and half a day.</p>
+          <span class="problem-row__n">03</span>
+          <div class="problem-row__body">
+            <h3>Scheduling back-and-forth</h3>
+            <p>"Does Tuesday work?" "Actually, how about Thursday?" Booking a single meeting should not take six emails and half a day.</p>
+          </div>
+          <span class="problem-row__cost">Six emails, one meeting</span>
         </article>
       </div>
     </div>
@@ -225,106 +301,136 @@
     <div class="wrap">
       <div class="section-head reveal">
         <p class="eyebrow">What this could look like</p>
-        <h2 id="build-heading">Automations I could set up for a trade business</h2>
-        <p class="section-lede">Illustrative examples, not delivered client work. Each one is a system a plumber, electrician or builder could have running quietly in the background.</p>
+        <h2 id="build-heading">Automations I could set up for your business</h2>
+        <p class="section-lede">Illustrative examples, not delivered client work. Each one is a system any small business could have running quietly in the background &mdash; shown here for a plumber, electrician and builder.</p>
       </div>
 
-      <div class="build-list">
-        <article class="build-item reveal" data-glow>
-          <div class="build-item__rail">
-            <span class="build-item__n">01</span>
-            <span class="build-item__label">Example</span>
-          </div>
-          <div class="build-item__media">
-            <img src="images/build-lead-response.jpg" alt="" aria-hidden="true" width="1000" height="737" loading="lazy">
-          </div>
-          <div class="build-item__body">
-            <h3>Never Miss a Lead Again</h3>
-            <p>A new enquiry from any channel gets an instant, personal reply, and a nudge to you if it is still unanswered an hour later.</p>
-            <ul class="pills">
-              <li>n8n</li>
-              <li>Claude API</li>
-              <li>Twilio</li>
-              <li>Gmail</li>
-            </ul>
-          </div>
-        </article>
+      <div class="build-switcher reveal" data-build-switcher>
+        <nav class="build-switcher__tabs" aria-label="Automation examples">
+          <a class="build-switcher__tab is-active" href="#build-item-1" data-build-tab="1">
+            <span class="build-switcher__tab-n">01</span>
+            <span class="build-switcher__tab-title">Never Miss a Lead Again</span>
+          </a>
+          <a class="build-switcher__tab" href="#build-item-2" data-build-tab="2">
+            <span class="build-switcher__tab-n">02</span>
+            <span class="build-switcher__tab-title">Automatic Job Scheduling</span>
+          </a>
+          <a class="build-switcher__tab" href="#build-item-3" data-build-tab="3">
+            <span class="build-switcher__tab-n">03</span>
+            <span class="build-switcher__tab-title">Invoices That Chase Themselves</span>
+          </a>
+          <a class="build-switcher__tab" href="#build-item-4" data-build-tab="4">
+            <span class="build-switcher__tab-n">04</span>
+            <span class="build-switcher__tab-title">Quotes Drafted While You Drive</span>
+          </a>
+          <a class="build-switcher__tab" href="#build-item-5" data-build-tab="5">
+            <span class="build-switcher__tab-n">05</span>
+            <span class="build-switcher__tab-title">Your Inbox, Pre-Sorted</span>
+          </a>
+        </nav>
 
-        <article class="build-item reveal" data-glow>
-          <div class="build-item__rail">
-            <span class="build-item__n">02</span>
-            <span class="build-item__label">Example</span>
-          </div>
-          <div class="build-item__media">
-            <img src="images/build-scheduling.jpg" alt="" aria-hidden="true" width="1000" height="737" loading="lazy">
-          </div>
-          <div class="build-item__body">
-            <h3>Automatic Job Scheduling</h3>
-            <p>Confirmed jobs drop straight into your calendar with travel time blocked out, and the customer gets a reminder the day before.</p>
-            <ul class="pills">
-              <li>n8n</li>
-              <li>Google Calendar</li>
-              <li>Claude API</li>
-            </ul>
-          </div>
-        </article>
+        <div class="build-list">
+          <article class="build-item is-active" id="build-item-1" data-build-item="1" data-glow>
+            <div class="build-item__rail">
+              <span class="build-item__n">01</span>
+              <span class="build-item__label">Example</span>
+            </div>
+            <div class="build-item__media">
+              <img src="images/build-lead-response.jpg" alt="" aria-hidden="true" width="1000" height="737" loading="lazy">
+            </div>
+            <div class="build-item__body">
+              <h3>Never Miss a Lead Again</h3>
+              <p>A new enquiry from any channel gets an instant, personal reply, and a nudge to you if it is still unanswered an hour later.</p>
+              <ul class="pills">
+                <li class="pill--core">Avora</li>
+                <li>n8n</li>
+                <li>Claude API</li>
+                <li>Twilio</li>
+                <li>Gmail</li>
+              </ul>
+            </div>
+          </article>
 
-        <article class="build-item reveal" data-glow>
-          <div class="build-item__rail">
-            <span class="build-item__n">03</span>
-            <span class="build-item__label">Example</span>
-          </div>
-          <div class="build-item__media">
-            <img src="images/build-invoicing.jpg" alt="" aria-hidden="true" width="1000" height="737" loading="lazy">
-          </div>
-          <div class="build-item__body">
-            <h3>Invoices That Chase Themselves</h3>
-            <p>An invoice goes out the moment a job is marked done, then polite reminders run on their own until the payment lands.</p>
-            <ul class="pills">
-              <li>n8n</li>
-              <li>Xero</li>
-              <li>Gmail</li>
-            </ul>
-          </div>
-        </article>
+          <article class="build-item" id="build-item-2" data-build-item="2" data-glow>
+            <div class="build-item__rail">
+              <span class="build-item__n">02</span>
+              <span class="build-item__label">Example</span>
+            </div>
+            <div class="build-item__media">
+              <img src="images/build-scheduling.jpg" alt="" aria-hidden="true" width="1000" height="737" loading="lazy">
+            </div>
+            <div class="build-item__body">
+              <h3>Automatic Job Scheduling</h3>
+              <p>Confirmed jobs drop straight into your calendar with travel time blocked out, and the customer gets a reminder the day before.</p>
+              <ul class="pills">
+                <li class="pill--core">Avora</li>
+                <li>n8n</li>
+                <li>Google Calendar</li>
+                <li>Claude API</li>
+              </ul>
+            </div>
+          </article>
 
-        <article class="build-item reveal" data-glow>
-          <div class="build-item__rail">
-            <span class="build-item__n">04</span>
-            <span class="build-item__label">Example</span>
-          </div>
-          <div class="build-item__media">
-            <img src="images/build-quotes.jpg" alt="" aria-hidden="true" width="1000" height="737" loading="lazy">
-          </div>
-          <div class="build-item__body">
-            <h3>Quotes Drafted While You Drive</h3>
-            <p>Send a voice note and a few photos from site, and get a formatted quote back, ready to check over and send.</p>
-            <ul class="pills">
-              <li>n8n</li>
-              <li>Claude API</li>
-              <li>WhatsApp</li>
-            </ul>
-          </div>
-        </article>
+          <article class="build-item" id="build-item-3" data-build-item="3" data-glow>
+            <div class="build-item__rail">
+              <span class="build-item__n">03</span>
+              <span class="build-item__label">Example</span>
+            </div>
+            <div class="build-item__media">
+              <img src="images/build-invoicing.jpg" alt="" aria-hidden="true" width="1000" height="737" loading="lazy">
+            </div>
+            <div class="build-item__body">
+              <h3>Invoices That Chase Themselves</h3>
+              <p>An invoice goes out the moment a job is marked done, then polite reminders run on their own until the payment lands.</p>
+              <ul class="pills">
+                <li class="pill--core">Avora</li>
+                <li>n8n</li>
+                <li>Xero</li>
+                <li>Gmail</li>
+              </ul>
+            </div>
+          </article>
 
-        <article class="build-item reveal" data-glow>
-          <div class="build-item__rail">
-            <span class="build-item__n">05</span>
-            <span class="build-item__label">Example</span>
-          </div>
-          <div class="build-item__media">
-            <img src="images/build-inbox.jpg" alt="" aria-hidden="true" width="1000" height="737" loading="lazy">
-          </div>
-          <div class="build-item__body">
-            <h3>Your Inbox, Pre-Sorted</h3>
-            <p>Enquiries, supplier emails and receipts get read, labelled and filed automatically, with the urgent ones flagged for you first.</p>
-            <ul class="pills">
-              <li>n8n</li>
-              <li>Claude API</li>
-              <li>Gmail</li>
-            </ul>
-          </div>
-        </article>
+          <article class="build-item" id="build-item-4" data-build-item="4" data-glow>
+            <div class="build-item__rail">
+              <span class="build-item__n">04</span>
+              <span class="build-item__label">Example</span>
+            </div>
+            <div class="build-item__media">
+              <img src="images/build-quotes.jpg" alt="" aria-hidden="true" width="1000" height="737" loading="lazy">
+            </div>
+            <div class="build-item__body">
+              <h3>Quotes Drafted While You Drive</h3>
+              <p>Send a voice note and a few photos from site, and get a formatted quote back, ready to check over and send.</p>
+              <ul class="pills">
+                <li class="pill--core">Avora</li>
+                <li>n8n</li>
+                <li>Claude API</li>
+                <li>WhatsApp</li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="build-item" id="build-item-5" data-build-item="5" data-glow>
+            <div class="build-item__rail">
+              <span class="build-item__n">05</span>
+              <span class="build-item__label">Example</span>
+            </div>
+            <div class="build-item__media">
+              <img src="images/build-inbox.jpg" alt="" aria-hidden="true" width="1000" height="737" loading="lazy">
+            </div>
+            <div class="build-item__body">
+              <h3>Your Inbox, Pre-Sorted</h3>
+              <p>Enquiries, supplier emails and receipts get read, labelled and filed automatically, with the urgent ones flagged for you first.</p>
+              <ul class="pills">
+                <li class="pill--core">Avora</li>
+                <li>n8n</li>
+                <li>Claude API</li>
+                <li>Gmail</li>
+              </ul>
+            </div>
+          </article>
+        </div>
       </div>
     </div>
   </section>
@@ -387,50 +493,343 @@
     </div>
   </section>
 
-  <section class="section styles" id="styles" aria-labelledby="styles-heading">
+  <section class="section showcase-section" id="styles" aria-labelledby="styles-heading">
     <div class="wrap">
       <div class="section-head reveal">
-        <h2 id="styles-heading">Website styles I can build</h2>
-        <p class="section-lede">A few directions a site could take. Illustrative concepts to show range, not client work.</p>
+        <p class="eyebrow">Design concepts</p>
+        <h2 id="styles-heading">Four directions, four different websites</h2>
+        <p class="section-lede">Illustrative design directions, coded and working, to show the range Avora can design in. These are demonstration concepts, not case studies or previous client work.</p>
       </div>
 
-      <ul class="styles-track reveal" tabindex="0" aria-label="Website style concepts. Scroll sideways to see more.">
-        <li class="style-card" data-glow>
-          <div class="style-card__media">
-            <img src="images/style-minimal-editorial.jpg" alt="Concept mockup of a minimal editorial homepage: large headline space, a single text column and generous white space" width="1200" height="884" loading="lazy">
-          </div>
-          <span class="style-card__tag">Style example</span>
-          <h3 class="style-card__name">Minimal / editorial</h3>
-          <p class="style-card__desc">Big type, generous space, one accent. Calm and confident, lets the words lead.</p>
-        </li>
+      <div class="showcase-demo" data-showcase>
+        <div class="showcase-demo__tabs" data-showcase-tabs role="tablist" aria-label="Website design concepts">
+          <button type="button" class="showcase-demo__tab is-active" data-showcase-tab="editorial" role="tab" aria-selected="true">
+            <span class="showcase-demo__tab-name">Editorial</span>
+            <span class="showcase-demo__tab-sub">Architecture &amp; interiors</span>
+          </button>
+          <button type="button" class="showcase-demo__tab" data-showcase-tab="bold" role="tab" aria-selected="false">
+            <span class="showcase-demo__tab-name">Bold</span>
+            <span class="showcase-demo__tab-sub">Construction &amp; engineering</span>
+          </button>
+          <button type="button" class="showcase-demo__tab" data-showcase-tab="corporate" role="tab" aria-selected="false">
+            <span class="showcase-demo__tab-name">Corporate</span>
+            <span class="showcase-demo__tab-sub">Advisory &amp; consultancy</span>
+          </button>
+          <button type="button" class="showcase-demo__tab" data-showcase-tab="warm" role="tab" aria-selected="false">
+            <span class="showcase-demo__tab-name">Warm</span>
+            <span class="showcase-demo__tab-sub">Bespoke joinery</span>
+          </button>
+        </div>
 
-        <li class="style-card" data-glow>
-          <div class="style-card__media">
-            <img src="images/style-bold-modern.jpg" alt="Concept mockup of a bold modern homepage: dark panel, one bright accent colour, large geometric blocks and rounded buttons" width="1200" height="884" loading="lazy">
-          </div>
-          <span class="style-card__tag">Style example</span>
-          <h3 class="style-card__name">Bold / modern</h3>
-          <p class="style-card__desc">High contrast, strong shapes, a single bright colour. Built to stop the scroll.</p>
-        </li>
+        <div class="browser-chrome" aria-hidden="true">
+          <span class="browser-chrome__dot"></span>
+          <span class="browser-chrome__dot"></span>
+          <span class="browser-chrome__dot"></span>
+          <span class="browser-chrome__url" data-showcase-url>Editorial design concept</span>
+          <span class="browser-chrome__badge">Illustrative only</span>
+        </div>
 
-        <li class="style-card" data-glow>
-          <div class="style-card__media">
-            <img src="images/style-clean-corporate.jpg" alt="Concept mockup of a clean corporate homepage: structured card grid, calm blues and a simple line chart" width="1200" height="884" loading="lazy">
-          </div>
-          <span class="style-card__tag">Style example</span>
-          <h3 class="style-card__name">Clean / corporate</h3>
-          <p class="style-card__desc">Structured grid, steady blues, clear sections. Reads organised and dependable.</p>
-        </li>
+        <div class="showcase-demo__frame">
 
-        <li class="style-card" data-glow>
-          <div class="style-card__media">
-            <img src="images/style-warm-independent.jpg" alt="Concept mockup of a warm independent homepage: soft tones, rounded cards, a muted accent and one lifestyle image" width="1200" height="884" loading="lazy">
+          <!-- ============================================================
+               EDITORIAL — architecture & interiors design concept
+               ============================================================ -->
+          <div class="concept concept--editorial is-active" data-showcase-concept="editorial" data-url="Editorial design concept">
+            <nav class="concept__nav">
+              <span class="concept__wordmark">STUDIO CONCEPT</span>
+              <span class="concept__nav-links">
+                <a href="#">Work</a>
+                <a href="#">Studio</a>
+                <a href="#">Journal</a>
+              </span>
+              <a href="#" class="concept__nav-cta">Contact</a>
+            </nav>
+
+            <div class="concept__pages" data-concept-pages>
+              <section class="concept__page concept__page--hero is-active" data-concept-page>
+                <img class="concept__hero-bg" src="images/showcase/editorial-hero.jpg" alt="Minimalist concrete and timber house at dusk, set into a hillside" loading="lazy" decoding="async">
+                <div class="concept__scrim"></div>
+                <div class="concept__hero-copy">
+                  <p class="concept__eyebrow">Architecture &amp; interiors</p>
+                  <h3>Spaces held in<br>quiet tension.</h3>
+                  <p class="concept__lede">An architecture and interiors studio working across residential and cultural projects.</p>
+                  <a href="#" class="concept__link">View selected work &rarr;</a>
+                </div>
+              </section>
+
+              <section class="concept__page concept__page--project" data-concept-page>
+                <div class="concept__project-media">
+                  <img src="images/showcase/editorial-project.jpg" alt="Minimalist living room with polished concrete floor and large format windows" loading="lazy" decoding="async">
+                </div>
+                <div class="concept__project-copy">
+                  <p class="concept__eyebrow">Featured project — 01</p>
+                  <h3>Residential Concept</h3>
+                  <p class="concept__meta">Private residence</p>
+                  <p class="concept__body">A concrete and timber residence set into a hillside, designed around light and material honesty.</p>
+                </div>
+              </section>
+
+              <section class="concept__page concept__page--studio" data-concept-page>
+                <div class="concept__studio-intro">
+                  <p class="concept__eyebrow">Studio</p>
+                  <p class="concept__body concept__body--lg">This studio direction is defined by restraint, material clarity and a close relationship to landscape.</p>
+                </div>
+                <div class="concept__studio-projects">
+                  <figure>
+                    <img src="images/showcase/editorial-detail.jpg" alt="Timber and stone staircase in a modern minimalist house" loading="lazy" decoding="async">
+                    <figcaption>Selected project — 02</figcaption>
+                  </figure>
+                  <figure>
+                    <img src="images/showcase/editorial-hero.jpg" alt="Minimalist concrete and timber house at dusk" loading="lazy" decoding="async">
+                    <figcaption>Selected project — 03</figcaption>
+                  </figure>
+                </div>
+              </section>
+
+              <section class="concept__page concept__page--cta" data-concept-page>
+                <h3>Let&rsquo;s talk about<br>your project.</h3>
+                <a href="#" class="concept__link concept__link--lg">Start the conversation &rarr;</a>
+                <div class="concept__foot">
+                  <span>Illustrative example only</span>
+                  <span>Instagram</span>
+                </div>
+              </section>
+            </div>
+
+            <div class="concept__dots" data-concept-dots aria-hidden="true">
+              <button data-page="0" class="is-active" aria-label="Hero"></button>
+              <button data-page="1" aria-label="Featured project"></button>
+              <button data-page="2" aria-label="Studio"></button>
+              <button data-page="3" aria-label="Contact"></button>
+            </div>
           </div>
-          <span class="style-card__tag">Style example</span>
-          <h3 class="style-card__name">Warm / independent</h3>
-          <p class="style-card__desc">Soft tones, rounded edges, friendly spacing. Approachable without feeling casual.</p>
-        </li>
-      </ul>
+
+          <!-- ============================================================
+               BOLD — construction & engineering design concept
+               ============================================================ -->
+          <div class="concept concept--bold" data-showcase-concept="bold" data-url="Bold design concept">
+            <nav class="concept__nav">
+              <span class="concept__wordmark">CONSTRUCTION CONCEPT</span>
+              <span class="concept__nav-links">
+                <a href="#">Projects</a>
+                <a href="#">Services</a>
+                <a href="#">Approach</a>
+              </span>
+              <a href="#" class="concept__nav-cta">Start a project</a>
+            </nav>
+
+            <div class="concept__pages" data-concept-pages>
+              <section class="concept__page concept__page--hero is-active" data-concept-page>
+                <img class="concept__hero-bg" src="images/showcase/bold-hero.jpg" alt="Modern steel and glass building under construction at dusk with a crane silhouette" loading="lazy" decoding="async">
+                <div class="concept__scrim"></div>
+                <div class="concept__hero-copy">
+                  <h3>WE BUILD<br>WHAT <span>LASTS.</span></h3>
+                  <p class="concept__lede">Structural engineering and design-build for ambitious construction projects.</p>
+                  <a href="#" class="concept__cta">View our work</a>
+                </div>
+              </section>
+
+              <section class="concept__page concept__page--gallery" data-concept-page>
+                <p class="concept__eyebrow">Selected work</p>
+                <div class="concept__gallery">
+                  <figure>
+                    <img src="images/showcase/bold-project.jpg" alt="Raw concrete and steel structural details on a construction site" loading="lazy" decoding="async">
+                    <figcaption>Project 01 &mdash; Structural Steel</figcaption>
+                  </figure>
+                  <figure>
+                    <img src="images/showcase/bold-materials.jpg" alt="Steel beams and structural joints on a construction site" loading="lazy" decoding="async">
+                    <figcaption>Project 02 &mdash; Design &amp; Build</figcaption>
+                  </figure>
+                </div>
+              </section>
+
+              <section class="concept__page concept__page--split" data-concept-page>
+                <ol class="concept__numbered">
+                  <li><span>01</span>Structural Engineering</li>
+                  <li><span>02</span>Design &amp; Build</li>
+                  <li><span>03</span>Fit-Out &amp; Refurbishment</li>
+                  <li><span>04</span>Groundworks</li>
+                </ol>
+                <div class="concept__stats">
+                  <div><strong>PRECISION</strong><span>Engineered to spec</span></div>
+                  <div><strong>SPEED</strong><span>Built to schedule</span></div>
+                  <div><strong>SAFETY</strong><span>Zero-compromise sites</span></div>
+                </div>
+              </section>
+
+              <section class="concept__page concept__page--cta" data-concept-page>
+                <h3>TELL US WHAT<br>YOU&rsquo;RE BUILDING.</h3>
+                <a href="#" class="concept__cta">Get in touch</a>
+                <div class="concept__foot">
+                  <span>Illustrative example only</span>
+                  <span>Construction &amp; engineering</span>
+                </div>
+              </section>
+            </div>
+
+            <div class="concept__dots" data-concept-dots aria-hidden="true">
+              <button data-page="0" class="is-active" aria-label="Hero"></button>
+              <button data-page="1" aria-label="Selected work"></button>
+              <button data-page="2" aria-label="Services and stats"></button>
+              <button data-page="3" aria-label="Contact"></button>
+            </div>
+          </div>
+
+          <!-- ============================================================
+               CORPORATE — B2B advisory & consultancy design concept
+               ============================================================ -->
+          <div class="concept concept--corporate" data-showcase-concept="corporate" data-url="Corporate design concept">
+            <nav class="concept__nav">
+              <span class="concept__wordmark">Advisory Concept</span>
+              <span class="concept__nav-links">
+                <a href="#">Services</a>
+                <a href="#">Insights</a>
+                <a href="#">About</a>
+              </span>
+              <a href="#" class="concept__nav-cta">Book a consultation</a>
+            </nav>
+
+            <div class="concept__pages" data-concept-pages>
+              <section class="concept__page concept__page--hero-split is-active" data-concept-page>
+                <div class="concept__hero-copy">
+                  <p class="concept__eyebrow">Strategy &amp; advisory</p>
+                  <h3>Clarity for complex decisions.</h3>
+                  <p class="concept__lede">This advisory concept is built for ambitious, founder-led businesses navigating strategy, transactions and growth.</p>
+                  <a href="#" class="concept__cta">Speak to our team</a>
+                </div>
+                <div class="concept__hero-media">
+                  <img src="images/showcase/corporate-hero.jpg" alt="Minimalist corporate office interior with a glass meeting room" loading="lazy" decoding="async">
+                </div>
+              </section>
+
+              <section class="concept__page concept__page--services" data-concept-page>
+                <p class="concept__eyebrow">How we help</p>
+                <div class="concept__service-grid">
+                  <div class="concept__service-card">
+                    <h4>Strategy Advisory</h4>
+                    <p>Clear, evidence-led direction for boards navigating growth or change.</p>
+                  </div>
+                  <div class="concept__service-card">
+                    <h4>Transaction Support</h4>
+                    <p>Due diligence and deal structuring for acquisitions and investment.</p>
+                  </div>
+                  <div class="concept__service-card">
+                    <h4>Risk &amp; Compliance</h4>
+                    <p>Practical frameworks that hold up under real scrutiny.</p>
+                  </div>
+                  <div class="concept__service-card">
+                    <h4>Growth Planning</h4>
+                    <p>Operational plans built around what a business can actually deliver.</p>
+                  </div>
+                </div>
+              </section>
+
+              <section class="concept__page concept__page--trust" data-concept-page>
+                <p class="concept__trust-line">Trusted by founder-led and private-equity-backed businesses across manufacturing, healthcare, technology and professional services.</p>
+                <div class="concept__tags">
+                  <span>Manufacturing</span><span>Healthcare</span><span>Technology</span><span>Professional Services</span>
+                </div>
+                <p class="concept__eyebrow concept__eyebrow--pad">Latest thinking</p>
+                <div class="concept__insights">
+                  <article><span class="concept__insight-meta">Strategy &middot; 5 min read</span><h4>Preparing for a successful exit</h4></article>
+                  <article><span class="concept__insight-meta">Operations &middot; 4 min read</span><h4>Building resilient supply chains</h4></article>
+                </div>
+              </section>
+
+              <section class="concept__page concept__page--cta" data-concept-page>
+                <h3>Start a conversation.</h3>
+                <a href="#" class="concept__cta">Book a consultation</a>
+                <div class="concept__foot">
+                  <span>Illustrative example only</span>
+                  <span>Professional services concept</span>
+                </div>
+              </section>
+            </div>
+
+            <div class="concept__dots" data-concept-dots aria-hidden="true">
+              <button data-page="0" class="is-active" aria-label="Hero"></button>
+              <button data-page="1" aria-label="Services"></button>
+              <button data-page="2" aria-label="Credibility and insights"></button>
+              <button data-page="3" aria-label="Contact"></button>
+            </div>
+          </div>
+
+          <!-- ============================================================
+               WARM — bespoke joinery design concept
+               ============================================================ -->
+          <div class="concept concept--warm" data-showcase-concept="warm" data-url="Warm design concept">
+            <nav class="concept__nav">
+              <span class="concept__wordmark">Joinery Concept</span>
+              <span class="concept__nav-links">
+                <a href="#">Work</a>
+                <a href="#">Services</a>
+                <a href="#">About</a>
+              </span>
+              <a href="#" class="concept__nav-cta">Get a quote</a>
+            </nav>
+
+            <div class="concept__pages" data-concept-pages>
+              <section class="concept__page concept__page--hero-split is-active" data-concept-page>
+                <div class="concept__hero-copy">
+                  <h3>Handmade joinery, built to last generations.</h3>
+                  <p class="concept__lede">Bespoke kitchens, staircases and fitted furniture, crafted by hand in a small workshop.</p>
+                  <a href="#" class="concept__cta">Get a quote</a>
+                </div>
+                <div class="concept__hero-media">
+                  <img src="images/showcase/warm-hero.jpg" alt="Handcrafted oak kitchen with bespoke wooden cabinetry" loading="lazy" decoding="async">
+                </div>
+              </section>
+
+              <section class="concept__page concept__page--warmwork" data-concept-page>
+                <ul class="concept__service-rows">
+                  <li><span>Kitchens</span>Bespoke, hand-built around your space</li>
+                  <li><span>Staircases</span>Curved, straight or floating designs</li>
+                  <li><span>Fitted furniture</span>Wardrobes, shelving and window seats</li>
+                  <li><span>Restoration</span>Careful repair of period joinery</li>
+                </ul>
+                <div class="concept__gallery concept__gallery--warm">
+                  <figure>
+                    <img src="images/showcase/warm-project.jpg" alt="Bespoke curved wooden staircase with oak handrail" loading="lazy" decoding="async">
+                    <figcaption>Curved staircase</figcaption>
+                  </figure>
+                  <figure>
+                    <img src="images/showcase/warm-workshop.jpg" alt="Carpenter's workshop with hand tools and warm light" loading="lazy" decoding="async">
+                    <figcaption>Our workshop</figcaption>
+                  </figure>
+                </div>
+              </section>
+
+              <section class="concept__page concept__page--warmtrust" data-concept-page>
+                <div class="concept__badges">
+                  <span>Traditional joinery techniques</span>
+                  <span>Fully insured</span>
+                  <span>FSC-certified timber</span>
+                  <span>Free design consultation</span>
+                </div>
+                <p class="concept__eyebrow">About the workshop</p>
+                <p class="concept__body concept__body--lg">We&rsquo;re a small team of joiners working from a converted barn workshop, building furniture and fittings meant to be used for decades, not years.</p>
+              </section>
+
+              <section class="concept__page concept__page--cta" data-concept-page>
+                <h3>Ready to start your project?</h3>
+                <a href="#" class="concept__cta">Get a quote</a>
+                <div class="concept__foot">
+                  <span>Illustrative example only</span>
+                  <span>Bespoke joinery concept</span>
+                </div>
+              </section>
+            </div>
+
+            <div class="concept__dots" data-concept-dots aria-hidden="true">
+              <button data-page="0" class="is-active" aria-label="Hero"></button>
+              <button data-page="1" aria-label="Services and work"></button>
+              <button data-page="2" aria-label="About"></button>
+              <button data-page="3" aria-label="Contact"></button>
+            </div>
+          </div>
+
+        </div>
+      </div>
     </div>
   </section>
 
@@ -558,8 +957,11 @@
   </div>
 </footer>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollTrigger.min.js"></script>
-<script src="js/script.js"></script>
+<!-- Built by Vite from src/main.tsx (`npm run build`). This is now the sole
+     source of GSAP/ScrollTrigger on the page — it registers the plugins and
+     exposes them as window globals for js/script.js below to consume, so
+     there is only ever one GSAP instance and one ScrollTrigger registry. -->
+<script type="module" src="app-dist/avora-app.js"></script>
+<script type="module" src="js/script.js"></script>
 </body>
 </html>

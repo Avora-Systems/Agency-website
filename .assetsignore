@@ -16,3 +16,15 @@ node_modules/**
 AGENTS.md
 CLAUDE.md
 wrangler.jsonc
+
+# React/Three.js source for the Avora Core hero island — only its built
+# output (app-dist/, produced by `npm run build`) needs to be public.
+components
+components/**
+src
+src/**
+package.json
+package-lock.json
+tsconfig.json
+vite.config.ts
+.mcp.json

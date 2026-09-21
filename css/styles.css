@@ -220,8 +220,7 @@ p {
 }
 
 .has-custom-cursor a,
-.has-custom-cursor button,
-.has-custom-cursor .styles-track {
+.has-custom-cursor button {
   cursor: none;
 }
 
@@ -623,17 +622,22 @@ p {
   }
 }
 
-/* Hero image sits beside the copy on desktop only; smaller viewports
-   keep the original text-only hero untouched. */
+/* The Avora System visual is DOM/CSS (no WebGL), so — unlike the old
+   Three.js core — it's light enough to show on every viewport: full-width
+   below the copy on mobile (simplified/autoplay, see HeroExperience),
+   beside it in a two-column grid from 921px up. */
 .hero__media {
-  display: none;
+  display: block;
+  width: 100%;
+  max-width: 420px;
+  margin: clamp(2.5rem, 8vw, 3.5rem) auto 0;
 }
 
 @media (min-width: 921px) {
   .hero__inner {
     width: 100%;
     display: grid;
-    grid-template-columns: minmax(0, 1.12fr) minmax(0, 0.88fr);
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     align-items: center;
     gap: clamp(2rem, 5vw, 4.5rem);
     perspective: 1200px;
@@ -644,22 +648,10 @@ p {
   }
 
   .hero__media {
-    display: block;
     justify-self: end;
     width: 100%;
-    max-width: 430px;
-    transform-style: preserve-3d;
-    transition: transform 0.4s var(--ease);
-    will-change: transform;
-  }
-
-  .hero__media img {
-    width: 100%;
-    height: auto;
-    aspect-ratio: 4 / 5;
-    object-fit: cover;
-    border: 1px solid var(--line);
-    border-radius: 12px;
+    max-width: 560px;
+    margin: 0;
   }
 }
 
@@ -762,60 +754,6 @@ p {
   filter: blur(30px);
   z-index: -1;
   pointer-events: none;
-}
-
-.hero__media-chip {
-  position: absolute;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.55rem 0.9rem 0.55rem 0.7rem;
-  background: rgba(255, 255, 255, 0.92);
-  backdrop-filter: blur(10px);
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  font-size: 0.78rem;
-  font-weight: 600;
-  color: var(--ink-soft);
-  box-shadow: 0 12px 24px -14px rgba(11, 11, 15, 0.35);
-  animation: chip-float 5s var(--ease) infinite;
-}
-
-.hero__media-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #22c55e;
-  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.18);
-}
-
-.hero__media-chip--top {
-  top: 8%;
-  left: -8%;
-  animation-delay: 0.4s;
-}
-
-.hero__media-chip--bottom {
-  bottom: 10%;
-  right: -6%;
-  animation-delay: 1.6s;
-}
-
-@keyframes chip-float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-8px); }
-}
-
-@media (max-width: 920px) {
-  .hero__media-chip {
-    display: none;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .hero__media-chip {
-    animation: none;
-  }
 }
 
 /* ============================================================
@@ -945,6 +883,88 @@ p {
   font-size: 0.98rem;
 }
 
+.step.is-active {
+  border-top-color: var(--accent);
+}
+
+.step.is-active .step__n {
+  color: var(--accent);
+}
+
+/* The same three-node system, drawn once and transformed by scroll:
+   scattered inputs -> connected -> flowing. See js/script.js.
+   Dots are plain HTML (not SVG circles) so they stay perfectly round —
+   the SVG below only holds the connecting lines and is deliberately
+   stretched to fill the width, which would distort circles but not
+   straight horizontal paths. */
+.how-diagram {
+  position: relative;
+  margin-top: clamp(2.5rem, 6vh, 4rem);
+  height: clamp(60px, 9vw, 110px);
+}
+
+.how-diagram__lines {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.how-diagram [data-diagram-line] {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 0.35;
+  stroke-linecap: round;
+}
+
+.how-diagram__dot {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+}
+
+.how-diagram__dot--scatter {
+  width: 7px;
+  height: 7px;
+  background: var(--ghost);
+}
+
+.how-diagram__dot--hub {
+  width: 13px;
+  height: 13px;
+  background: var(--paper);
+  border: 1.5px solid var(--ghost);
+}
+
+.how-diagram__dot--flow {
+  width: 9px;
+  height: 9px;
+  background: var(--accent);
+  z-index: 1;
+}
+
+@media (max-width: 920px) {
+  .how-diagram {
+    display: none;
+  }
+}
+
+/* The scroll-scrubbed reveal (js/script.js) never runs under reduced
+   motion, so the lines render in their natural, fully-drawn state by
+   default (no dasharray applied) — show the rest of the "running"
+   end-state to match, rather than a half-chaotic, half-connected mix. */
+@media (prefers-reduced-motion: reduce) {
+  .how-diagram__dot--scatter {
+    display: none;
+  }
+
+  .how-diagram__dot--hub {
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+}
+
 /* ============================================================
    Problems — hairline-divided two-column list
    ============================================================ */
@@ -956,10 +976,19 @@ p {
 
 .problem-row {
   display: grid;
-  grid-template-columns: minmax(0, 24ch) 1fr;
+  grid-template-columns: clamp(2.5rem, 5vw, 3.5rem) minmax(0, 24ch) 1fr;
+  align-items: baseline;
   gap: clamp(0.75rem, 4vw, 3rem);
   padding: clamp(1.75rem, 4vw, 2.75rem) 0;
   border-bottom: 1px solid var(--line);
+}
+
+.problem-row__n {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1.3rem, 2.2vw, 1.75rem);
+  letter-spacing: -0.04em;
+  color: var(--ghost);
 }
 
 .problem-row h3 {
@@ -970,7 +999,20 @@ p {
 .problem-row p {
   color: var(--body);
   max-width: 54ch;
+  margin-top: 0.5rem;
 }
+
+.problem-row__cost {
+  justify-self: end;
+  align-self: center;
+  text-align: right;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--faint);
+  white-space: nowrap;
+}
+
 
 /* ============================================================
    Services — "What we build"
@@ -1304,6 +1346,93 @@ p {
   background: var(--pill-bg);
   border-radius: 999px;
   padding: 0.32rem 0.72rem;
+}
+
+.pill--core {
+  background: var(--ink) !important;
+  color: #fff !important;
+  font-weight: 600;
+}
+
+/* ============================================================
+   Automation examples — one system, switched between (progressive
+   enhancement: without JS this is simply the original vertical
+   list of five examples, in full).
+   ============================================================ */
+
+.build-switcher__tabs {
+  display: none;
+  flex-direction: column;
+  margin-top: clamp(2rem, 5vw, 3rem);
+  border-top: 1px solid var(--line);
+}
+
+.build-switcher__tab {
+  display: flex;
+  align-items: baseline;
+  gap: 0.9rem;
+  padding: 0.85rem 0.25rem;
+  border-bottom: 1px solid var(--line);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.build-switcher__tab-n {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+  color: var(--ghost);
+  transition: color var(--dur) var(--ease);
+}
+
+.build-switcher__tab-title {
+  font-weight: 600;
+  color: var(--ink-soft);
+  transition: color var(--dur) var(--ease);
+}
+
+.build-switcher__tab:hover .build-switcher__tab-title {
+  color: var(--ink);
+}
+
+.build-switcher__tab.is-active .build-switcher__tab-n,
+.build-switcher__tab.is-active .build-switcher__tab-title {
+  color: var(--accent);
+}
+
+.build-switcher.is-enhanced .build-switcher__tabs {
+  display: flex;
+}
+
+.build-switcher.is-enhanced .build-list {
+  position: relative;
+  margin-top: 0;
+}
+
+/* Inactive items are stacked with opacity/visibility rather than
+   display:none — Chromium can fail to ever paint a loading="lazy" image
+   whose ancestor toggles display:none -> grid, even once it has decoded
+   (naturalWidth confirms it), so display stays constant (grid) here. */
+.build-switcher.is-enhanced .build-item {
+  position: absolute;
+  inset: 0;
+  border-top: none;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.45s var(--ease);
+}
+
+.build-switcher.is-enhanced .build-item:last-child {
+  border-bottom: none;
+}
+
+.build-switcher.is-enhanced .build-item.is-active {
+  position: relative;
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
 }
 
 /* ============================================================
@@ -2001,81 +2130,10 @@ p {
 }
 
 /* ============================================================
-   Website styles gallery (horizontal scroll, hover-scale cards)
+   Website design showcase — see css/showcase.css. Kept as a
+   separate stylesheet since it holds four independent, sizeable
+   design systems rather than site-wide rules.
    ============================================================ */
-
-.styles-track {
-  list-style: none;
-  margin: clamp(3rem, 7vh, 5rem) 0 0;
-  padding: 0 0 1rem;
-  display: grid;
-  grid-auto-flow: column;
-  grid-auto-columns: min(80vw, 340px);
-  gap: clamp(1rem, 3vw, 1.75rem);
-  overflow-x: auto;
-  overscroll-behavior-x: contain;
-  scroll-snap-type: x proximity;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: thin;
-}
-
-.styles-track:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 6px;
-  border-radius: 2px;
-}
-
-.style-card {
-  scroll-snap-align: start;
-  transition: transform var(--dur) var(--ease);
-}
-
-.style-card:hover {
-  transform: translateY(-4px) scale(1.02);
-}
-
-.style-card__media {
-  position: relative;
-  aspect-ratio: 4 / 3;
-  background: #eef0f4;
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  overflow: hidden;
-  transition: border-color var(--dur) var(--ease);
-}
-
-.style-card:hover .style-card__media {
-  border-color: var(--accent-ring);
-}
-
-.style-card__media img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.style-card__tag {
-  display: inline-block;
-  margin-top: 0.9rem;
-  font-size: 0.68rem;
-  font-weight: 600;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--faint);
-}
-
-.style-card__name {
-  margin-top: 0.5rem;
-  font-size: 1.1rem;
-  letter-spacing: -0.02em;
-}
-
-.style-card__desc {
-  margin-top: 0.5rem;
-  color: var(--body);
-  font-size: 0.95rem;
-  max-width: 34ch;
-}
 
 /* ============================================================
    Scroll reveal
@@ -2114,6 +2172,16 @@ p {
 
   .problem-row {
     grid-template-columns: 1fr;
+  }
+
+  .problem-row__n {
+    margin-bottom: 0.25rem;
+  }
+
+  .problem-row__cost {
+    justify-self: start;
+    text-align: left;
+    margin-top: 0.5rem;
   }
 
   .svc-grid {

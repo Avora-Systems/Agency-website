@@ -1,0 +1,1107 @@
+/* ============================================================
+   Website design showcase
+   ============================================================
+   Four fully coded concept sites (Editorial / Bold / Corporate /
+   Warm) inside one browser-frame demo. Each concept below defines
+   its own local design system as CSS custom properties scoped to
+   `.concept--{name}` — different type treatment, spacing, grid,
+   corner radius, colour and interaction style, not just a palette
+   swap on one shared template. No new webfonts are loaded here:
+   differentiation comes from scale/weight/spacing/radius/colour,
+   reusing the site's existing self-hosted fonts and system-font
+   stacks (keeps this consistent with the rest of the site's
+   font-privacy stance and adds zero load cost).
+   ============================================================ */
+
+.showcase-demo {
+  margin-top: clamp(2.5rem, 6vh, 4rem);
+}
+
+.showcase-demo__tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.showcase-demo__tab {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.15rem;
+  background: var(--pill-bg);
+  border: none;
+  border-radius: 12px;
+  padding: 0.6rem 1rem;
+  cursor: pointer;
+  transition: background var(--dur) var(--ease);
+}
+
+.showcase-demo__tab:hover {
+  background: #e7e9ee;
+}
+
+.showcase-demo__tab.is-active {
+  background: var(--ink);
+}
+
+.showcase-demo__tab-name {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--ink-soft);
+  transition: color var(--dur) var(--ease);
+}
+
+.showcase-demo__tab.is-active .showcase-demo__tab-name {
+  color: #fff;
+}
+
+.showcase-demo__tab-sub {
+  font-size: 0.7rem;
+  color: var(--faint);
+  transition: color var(--dur) var(--ease);
+}
+
+.showcase-demo__tab.is-active .showcase-demo__tab-sub {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* Browser chrome */
+
+.browser-chrome {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: clamp(1.5rem, 4vw, 2rem);
+  padding: 0.65rem 0.9rem;
+  background: var(--paper-alt);
+  border: 1px solid var(--line);
+  border-bottom: none;
+  border-radius: 10px 10px 0 0;
+}
+
+.browser-chrome__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--ghost);
+}
+
+.browser-chrome__url {
+  margin-left: 0.6rem;
+  font-size: 0.75rem;
+  color: var(--faint);
+  transition: opacity 0.2s ease;
+}
+
+.browser-chrome__badge {
+  margin-left: auto;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--faint);
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 0.2rem 0.55rem;
+}
+
+/* Frame + concept crossfade */
+
+.showcase-demo__frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 8 / 5;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 0 0 12px 12px;
+  box-shadow: 0 40px 80px -40px rgba(11, 11, 15, 0.35);
+}
+
+.concept {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(10px);
+  transition: opacity 0.5s var(--ease), transform 0.5s var(--ease), visibility 0.5s;
+}
+
+.concept.is-active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .concept {
+    transition: opacity 0.3s linear, visibility 0.3s;
+    transform: none;
+  }
+}
+
+.concept__nav {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: clamp(1rem, 3vw, 2rem);
+  padding: 0 clamp(1rem, 3vw, 2rem);
+  height: 56px;
+}
+
+.concept__nav-links {
+  display: flex;
+  gap: clamp(0.9rem, 2vw, 1.6rem);
+  margin-right: auto;
+}
+
+.concept__pages {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.concept__page {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateX(16px);
+  transition: opacity 0.45s var(--ease), transform 0.45s var(--ease), visibility 0.45s;
+  overflow: hidden;
+}
+
+/* Compound selector deliberately: visibility/pointer-events set on a
+   descendant override an ancestor's "hidden"/"none" regardless of the
+   ancestor's own state, so an inactive concept's own page-0 (every
+   concept starts on page 0, see js/script.js) would otherwise punch
+   through .concept's hidden state and sit there intercepting clicks
+   meant for whatever's actually visible on top of it. */
+.concept.is-active .concept__page.is-active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateX(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .concept__page {
+    transition: opacity 0.3s linear, visibility 0.3s;
+    transform: none;
+  }
+}
+
+.concept__dots {
+  position: absolute;
+  right: clamp(0.9rem, 2vw, 1.5rem);
+  bottom: clamp(0.9rem, 2vw, 1.5rem);
+  z-index: 3;
+  display: flex;
+  gap: 0.4rem;
+}
+
+.concept__dots button {
+  width: 7px;
+  height: 7px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.18);
+  cursor: pointer;
+  transition: background 0.25s ease, transform 0.25s ease;
+}
+
+.concept__dots button.is-active {
+  transform: scale(1.3);
+}
+
+.concept__scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+/* Full-bleed hero photography as a real <img> (not a CSS background-image)
+   so it can carry loading="lazy" — background-images have no native lazy
+   loading and would otherwise download on every page view regardless of
+   whether the visitor ever reaches this below-the-fold section. */
+.concept__hero-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Shared, unstyled-by-default content primitives — each concept
+   below sets its own colour/type/spacing for these. */
+.concept__eyebrow {
+  display: block;
+}
+
+.concept__gallery {
+  display: grid;
+  gap: 1px;
+}
+
+.concept__gallery figure {
+  position: relative;
+  margin: 0;
+  overflow: hidden;
+}
+
+.concept__gallery img,
+.concept__hero-media img,
+.concept__project-media img,
+.concept__studio-projects img,
+.concept__trust__about img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ============================================================
+   EDITORIAL — architecture & interiors design concept
+   Design system: system-serif display (zero new font load), sharp
+   (0px) corners throughout, extreme whitespace, asymmetric split
+   grid, muted stone/charcoal palette, near-silent interaction
+   (slow fades only, no button fills — text links with an arrow).
+   ============================================================ */
+
+.concept--editorial {
+  --ce-bg: #f5f2ec;
+  --ce-ink: #1b1815;
+  --ce-body: #55504a;
+  --ce-accent: #8a7256;
+  --ce-line: rgba(27, 24, 21, 0.14);
+  --ce-serif: ui-serif, Georgia, "Times New Roman", serif;
+  background: var(--ce-bg);
+  color: var(--ce-ink);
+}
+
+.concept--editorial .concept__nav {
+  border-bottom: 1px solid var(--ce-line);
+}
+
+.concept--editorial .concept__wordmark {
+  font-family: var(--ce-serif);
+  font-size: 0.95rem;
+  letter-spacing: 0.03em;
+}
+
+.concept--editorial .concept__nav-links a {
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ce-body);
+}
+
+.concept--editorial .concept__nav-cta {
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--ce-ink);
+  padding-bottom: 2px;
+}
+
+.concept--editorial .concept__eyebrow {
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ce-accent);
+  margin-bottom: 0.6rem;
+}
+
+.concept--editorial h3 {
+  font-family: var(--ce-serif);
+  font-weight: 400;
+  font-size: clamp(1.4rem, 3.4vw, 2.4rem);
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+}
+
+.concept--editorial .concept__lede,
+.concept--editorial .concept__body {
+  font-size: 0.85rem;
+  color: var(--ce-body);
+  max-width: 34ch;
+  margin-top: 0.9rem;
+}
+
+.concept--editorial .concept__body--lg {
+  font-family: var(--ce-serif);
+  font-size: 1.1rem;
+  color: var(--ce-ink);
+  max-width: 30ch;
+}
+
+.concept--editorial .concept__link {
+  display: inline-block;
+  margin-top: 1.4rem;
+  font-size: 0.78rem;
+  border-bottom: 1px solid var(--ce-ink);
+  padding-bottom: 2px;
+}
+
+.concept--editorial .concept__link--lg {
+  font-family: var(--ce-serif);
+  font-size: 1.1rem;
+}
+
+.concept--editorial .concept__page--hero .concept__scrim {
+  background: linear-gradient(100deg, var(--ce-bg) 32%, rgba(245, 242, 236, 0.55) 55%, transparent 75%);
+}
+
+.concept--editorial .concept__hero-copy {
+  position: relative;
+  z-index: 1;
+  width: 46%;
+  padding: 0 clamp(1rem, 3vw, 2.5rem);
+}
+
+.concept--editorial .concept__page--project {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  align-items: stretch;
+}
+
+.concept--editorial .concept__project-media {
+  position: relative;
+}
+
+.concept--editorial .concept__project-copy {
+  align-self: center;
+  padding: 0 clamp(1rem, 3vw, 2rem);
+}
+
+.concept--editorial .concept__meta {
+  font-size: 0.75rem;
+  color: var(--ce-accent);
+  margin-top: 0.3rem;
+}
+
+.concept--editorial .concept__page--studio {
+  display: grid;
+  grid-template-columns: 0.9fr 1.2fr;
+  gap: clamp(1.2rem, 3vw, 2.5rem);
+  padding: 0 clamp(1rem, 3vw, 2.5rem);
+}
+
+.concept--editorial .concept__studio-intro {
+  align-self: center;
+}
+
+.concept--editorial .concept__studio-projects {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.9rem;
+  align-self: center;
+}
+
+.concept--editorial .concept__studio-projects figure {
+  margin: 0;
+  aspect-ratio: 4 / 5;
+}
+
+.concept--editorial .concept__studio-projects figcaption {
+  margin-top: 0.5rem;
+  font-size: 0.7rem;
+  color: var(--ce-body);
+}
+
+.concept--editorial .concept__page--cta {
+  align-items: center;
+  text-align: center;
+  gap: 0.6rem;
+  padding: 0 1rem;
+}
+
+.concept--editorial .concept__foot {
+  margin-top: 2rem;
+  display: flex;
+  gap: 1.2rem;
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ce-body);
+}
+
+@media (max-width: 720px) {
+  .concept--editorial .concept__hero-copy {
+    width: 92%;
+  }
+  .concept--editorial .concept__page--project,
+  .concept--editorial .concept__page--studio {
+    grid-template-columns: 1fr;
+    gap: 0.6rem;
+  }
+  .concept--editorial .concept__studio-intro {
+    display: none;
+  }
+}
+
+/* ============================================================
+   BOLD — construction & engineering design concept
+   Design system: Schibsted Grotesk pushed to an extreme register
+   (huge, uppercase, tight tracking) rather than a new typeface —
+   deliberately different from how the main site uses the same
+   font. Near-black + safety-orange, sharp clipped-corner motif via
+   clip-path, dense spacing, fast/snappy transitions.
+   ============================================================ */
+
+.concept--bold {
+  --cb-bg: #0d0d0d;
+  --cb-ink: #f5f5f0;
+  --cb-body: #b7b6b2;
+  --cb-accent: #ff4d1c;
+  background: var(--cb-bg);
+  color: var(--cb-ink);
+}
+
+.concept--bold .concept__nav {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.concept--bold .concept__wordmark {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.05rem;
+  letter-spacing: -0.01em;
+}
+
+.concept--bold .concept__nav-links a {
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--cb-body);
+}
+
+.concept--bold .concept__nav-cta {
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  background: var(--cb-accent);
+  color: #0d0d0d;
+  padding: 0.5rem 0.9rem;
+  clip-path: polygon(0 0, 100% 0, 100% 70%, 92% 100%, 0 100%);
+}
+
+.concept--bold h3 {
+  font-family: var(--font-display);
+  font-weight: 800;
+  text-transform: uppercase;
+  font-size: clamp(1.5rem, 4vw, 2.7rem);
+  line-height: 0.96;
+  letter-spacing: -0.02em;
+}
+
+.concept--bold h3 span {
+  color: var(--cb-accent);
+}
+
+.concept--bold .concept__lede {
+  margin-top: 0.9rem;
+  font-size: 0.85rem;
+  color: var(--cb-body);
+  max-width: 32ch;
+}
+
+.concept--bold .concept__cta {
+  display: inline-block;
+  margin-top: 1.4rem;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  background: var(--cb-accent);
+  color: #0d0d0d;
+  padding: 0.7rem 1.2rem;
+  clip-path: polygon(0 0, 100% 0, 100% 65%, 90% 100%, 0 100%);
+}
+
+.concept--bold .concept__page--hero .concept__scrim {
+  background: linear-gradient(100deg, rgba(13, 13, 13, 0.94) 30%, rgba(13, 13, 13, 0.55) 62%, rgba(13, 13, 13, 0.25) 100%);
+}
+
+.concept--bold .concept__hero-copy {
+  position: relative;
+  z-index: 1;
+  padding: 0 clamp(1rem, 3vw, 2.5rem);
+}
+
+.concept--bold .concept__eyebrow {
+  font-family: var(--font-display);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--cb-accent);
+  margin-bottom: 0.6rem;
+}
+
+.concept--bold .concept__page--gallery {
+  padding: 0 clamp(1rem, 3vw, 2rem);
+  gap: 0.6rem;
+}
+
+.concept--bold .concept__gallery {
+  grid-template-columns: 1.4fr 1fr;
+  gap: 3px;
+  flex: 1;
+}
+
+.concept--bold .concept__gallery figure:first-child {
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 6% 100%);
+}
+
+.concept--bold .concept__gallery figcaption {
+  position: absolute;
+  left: 0.9rem;
+  bottom: 0.8rem;
+  font-family: var(--font-display);
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #fff;
+  background: rgba(13, 13, 13, 0.55);
+  padding: 0.3rem 0.6rem;
+}
+
+.concept--bold .concept__page--split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(1rem, 3vw, 2rem);
+  padding: 0 clamp(1rem, 3vw, 2.5rem);
+}
+
+.concept--bold .concept__numbered {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.concept--bold .concept__numbered li {
+  display: flex;
+  align-items: baseline;
+  gap: 0.8rem;
+  padding: 0.65rem 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+}
+
+.concept--bold .concept__numbered span {
+  font-size: 0.75rem;
+  color: var(--cb-accent);
+}
+
+.concept--bold .concept__stats {
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.concept--bold .concept__stats strong {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  display: block;
+  line-height: 1;
+}
+
+.concept--bold .concept__stats span {
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--cb-body);
+}
+
+.concept--bold .concept__page--cta {
+  align-items: center;
+  text-align: center;
+  gap: 0.6rem;
+  padding: 0 1rem;
+}
+
+.concept--bold .concept__foot {
+  margin-top: 2rem;
+  display: flex;
+  gap: 1.2rem;
+  font-family: var(--font-display);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--cb-body);
+}
+
+@media (max-width: 720px) {
+  .concept--bold .concept__page--split {
+    grid-template-columns: 1fr;
+  }
+  .concept--bold .concept__stats {
+    flex-direction: row;
+    gap: 1.4rem;
+  }
+}
+
+/* ============================================================
+   CORPORATE — advisory & consultancy design concept
+   Design system: Inter only, used for both display and body —
+   restraint through one refined typeface rather than a pairing.
+   Strict symmetric grid, small consistent radius (8px), cool
+   navy/paper palette distinct from Avora's own brand blue, very
+   subtle fade+translate transitions, no numeric Avora-style
+   claims — trust is conveyed through sector tags, not stats.
+   ============================================================ */
+
+.concept--corporate {
+  --cc-bg: #f6f7fa;
+  --cc-ink: #10192b;
+  --cc-body: #5b6576;
+  --cc-accent: #24507e;
+  --cc-line: rgba(16, 25, 43, 0.1);
+  background: var(--cc-bg);
+  color: var(--cc-ink);
+}
+
+.concept--corporate,
+.concept--corporate .concept__nav-cta,
+.concept--corporate .concept__cta {
+  font-family: var(--font-body);
+}
+
+.concept--corporate .concept__nav {
+  border-bottom: 1px solid var(--cc-line);
+}
+
+.concept--corporate .concept__wordmark {
+  font-weight: 700;
+  font-size: 0.9rem;
+  letter-spacing: -0.01em;
+}
+
+.concept--corporate .concept__nav-links a {
+  font-size: 0.76rem;
+  font-weight: 500;
+  color: var(--cc-body);
+}
+
+.concept--corporate .concept__nav-cta {
+  font-size: 0.76rem;
+  font-weight: 600;
+  background: var(--cc-accent);
+  color: #fff;
+  padding: 0.5rem 0.9rem;
+  border-radius: 8px;
+}
+
+.concept--corporate h3 {
+  font-weight: 700;
+  font-size: clamp(1.25rem, 2.8vw, 1.9rem);
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+}
+
+.concept--corporate .concept__eyebrow {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--cc-accent);
+  margin-bottom: 0.6rem;
+}
+
+.concept--corporate .concept__lede {
+  margin-top: 0.7rem;
+  font-size: 0.85rem;
+  color: var(--cc-body);
+  max-width: 34ch;
+}
+
+.concept--corporate .concept__cta {
+  display: inline-block;
+  margin-top: 1.2rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  background: var(--cc-accent);
+  color: #fff;
+  padding: 0.6rem 1.1rem;
+  border-radius: 8px;
+}
+
+.concept--corporate .concept__page--hero-split {
+  display: grid;
+  grid-template-columns: 1fr 0.9fr;
+  gap: clamp(1rem, 3vw, 2rem);
+  align-items: center;
+  padding: 0 clamp(1rem, 3vw, 2.5rem);
+}
+
+.concept--corporate .concept__hero-media {
+  aspect-ratio: 4 / 3;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.concept--corporate .concept__page--services {
+  padding: clamp(1rem, 3vw, 2rem) clamp(1rem, 3vw, 2.5rem);
+}
+
+.concept--corporate .concept__service-grid {
+  margin-top: 0.8rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.7rem;
+}
+
+.concept--corporate .concept__service-card {
+  background: #fff;
+  border: 1px solid var(--cc-line);
+  border-radius: 8px;
+  padding: 0.8rem 0.9rem;
+}
+
+.concept--corporate .concept__service-card h4 {
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.concept--corporate .concept__service-card p {
+  margin-top: 0.35rem;
+  font-size: 0.72rem;
+  color: var(--cc-body);
+}
+
+.concept--corporate .concept__page--trust {
+  padding: clamp(1rem, 3vw, 2rem) clamp(1rem, 3vw, 2.5rem);
+}
+
+.concept--corporate .concept__trust-line {
+  font-size: 0.85rem;
+  max-width: 44ch;
+}
+
+.concept--corporate .concept__tags {
+  margin-top: 0.7rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.concept--corporate .concept__tags span {
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--cc-accent);
+  background: rgba(36, 80, 126, 0.09);
+  border-radius: 8px;
+  padding: 0.28rem 0.6rem;
+}
+
+.concept--corporate .concept__eyebrow--pad {
+  margin-top: 1.1rem;
+}
+
+.concept--corporate .concept__insights {
+  margin-top: 0.6rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.7rem;
+}
+
+.concept--corporate .concept__insights article {
+  border-top: 1px solid var(--cc-line);
+  padding-top: 0.5rem;
+}
+
+.concept--corporate .concept__insights h4 {
+  margin-top: 0.3rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.concept--corporate .concept__insight-meta {
+  font-size: 0.66rem;
+  color: var(--cc-body);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.concept--corporate .concept__page--cta {
+  align-items: flex-start;
+  gap: 0.4rem;
+  padding: 0 clamp(1rem, 3vw, 2.5rem);
+}
+
+.concept--corporate .concept__page--cta p {
+  font-size: 0.82rem;
+  color: var(--cc-body);
+  max-width: 40ch;
+}
+
+.concept--corporate .concept__foot {
+  margin-top: 1.6rem;
+  display: flex;
+  gap: 1.6rem;
+  font-size: 0.75rem;
+  color: var(--cc-body);
+}
+
+@media (max-width: 720px) {
+  .concept--corporate .concept__page--hero-split {
+    grid-template-columns: 1fr;
+  }
+  .concept--corporate .concept__hero-media {
+    display: none;
+  }
+  .concept--corporate .concept__service-grid,
+  .concept--corporate .concept__insights {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ============================================================
+   WARM — bespoke joinery design concept
+   Design system: rounded system-sans headings (ui-rounded, falls
+   back to Inter), large soft radius (22px) — the opposite extreme
+   from Editorial's sharp corners — cream/terracotta palette,
+   simple organic single/two-column layout, gentle hover lifts.
+   ============================================================ */
+
+.concept--warm {
+  --cw-bg: #f6ede0;
+  --cw-ink: #3b2a1e;
+  --cw-body: #6b5847;
+  --cw-accent: #c1682f;
+  --cw-rounded: ui-rounded, "SF Pro Rounded", var(--font-body), sans-serif;
+  background: var(--cw-bg);
+  color: var(--cw-ink);
+}
+
+.concept--warm .concept__nav {
+  border-bottom: 1px solid rgba(59, 42, 30, 0.1);
+}
+
+.concept--warm .concept__wordmark {
+  font-family: var(--cw-rounded);
+  font-weight: 700;
+  font-size: 0.92rem;
+}
+
+.concept--warm .concept__nav-links a {
+  font-size: 0.78rem;
+  color: var(--cw-body);
+}
+
+.concept--warm .concept__nav-cta {
+  font-family: var(--cw-rounded);
+  font-size: 0.78rem;
+  font-weight: 700;
+  background: var(--cw-accent);
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+}
+
+.concept--warm h3 {
+  font-family: var(--cw-rounded);
+  font-weight: 700;
+  font-size: clamp(1.2rem, 2.8vw, 1.85rem);
+  line-height: 1.25;
+  letter-spacing: -0.005em;
+}
+
+.concept--warm .concept__lede {
+  margin-top: 0.7rem;
+  font-size: 0.85rem;
+  color: var(--cw-body);
+  max-width: 34ch;
+}
+
+.concept--warm .concept__cta {
+  display: inline-block;
+  margin-top: 1.3rem;
+  font-family: var(--cw-rounded);
+  font-weight: 700;
+  font-size: 0.8rem;
+  background: var(--cw-accent);
+  color: #fff;
+  padding: 0.65rem 1.3rem;
+  border-radius: 999px;
+  transition: transform 0.25s ease;
+}
+
+.concept--warm .concept__cta:hover {
+  transform: translateY(-2px);
+}
+
+.concept--warm .concept__page--hero-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(1rem, 3vw, 2rem);
+  align-items: center;
+  padding: 0 clamp(1rem, 3vw, 2.5rem);
+}
+
+.concept--warm .concept__hero-media {
+  aspect-ratio: 4 / 3;
+  border-radius: 22px;
+  overflow: hidden;
+}
+
+.concept--warm .concept__page--warmwork {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: clamp(1rem, 3vw, 2rem);
+  padding: 0 clamp(1rem, 3vw, 2.5rem);
+  align-items: center;
+}
+
+.concept--warm .concept__service-rows {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.concept--warm .concept__service-rows li {
+  padding: 0.6rem 0;
+  border-top: 1px solid rgba(59, 42, 30, 0.12);
+  font-size: 0.78rem;
+  color: var(--cw-body);
+}
+
+.concept--warm .concept__service-rows span {
+  display: block;
+  font-family: var(--cw-rounded);
+  font-weight: 700;
+  font-size: 0.88rem;
+  color: var(--cw-ink);
+  margin-bottom: 0.15rem;
+}
+
+.concept--warm .concept__gallery--warm {
+  grid-template-columns: 1fr 1fr;
+  gap: 0.7rem;
+  background: transparent;
+}
+
+.concept--warm .concept__gallery--warm figure {
+  border-radius: 22px;
+  aspect-ratio: 4 / 5;
+}
+
+.concept--warm .concept__gallery--warm figcaption {
+  position: absolute;
+  left: 0.8rem;
+  bottom: 0.7rem;
+  font-size: 0.66rem;
+  font-weight: 600;
+  color: #fff;
+  background: rgba(59, 42, 30, 0.55);
+  border-radius: 999px;
+  padding: 0.25rem 0.6rem;
+}
+
+.concept--warm .concept__page--warmtrust {
+  padding: 0 clamp(1rem, 3vw, 2.5rem);
+}
+
+.concept--warm .concept__badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.concept--warm .concept__badges span {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--cw-accent);
+  background: rgba(193, 104, 47, 0.12);
+  border-radius: 999px;
+  padding: 0.32rem 0.7rem;
+}
+
+.concept--warm .concept__eyebrow {
+  display: block;
+  margin-top: 1.2rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--cw-accent);
+}
+
+.concept--warm .concept__body--lg {
+  margin-top: 0.5rem;
+  font-size: 0.95rem;
+  max-width: 44ch;
+}
+
+.concept--warm .concept__page--cta {
+  align-items: center;
+  text-align: center;
+  gap: 0.5rem;
+  padding: 0 1rem;
+}
+
+.concept--warm .concept__foot {
+  margin-top: 1.6rem;
+  display: flex;
+  gap: 1.4rem;
+  font-size: 0.75rem;
+  color: var(--cw-body);
+}
+
+@media (max-width: 720px) {
+  .concept--warm .concept__page--hero-split,
+  .concept--warm .concept__page--warmwork {
+    grid-template-columns: 1fr;
+  }
+  .concept--warm .concept__hero-media {
+    display: none;
+  }
+}
+
+/* ============================================================
+   Mobile: a phone-proportioned frame instead of a shrunk desktop
+   window, per concept — each already reflows via the 720px rules
+   above; this just changes the frame itself.
+   ============================================================ */
+
+@media (max-width: 640px) {
+  .showcase-demo__frame {
+    aspect-ratio: 9 / 16;
+    max-width: 360px;
+    margin: 0 auto;
+  }
+
+  .concept__nav {
+    height: 48px;
+    padding: 0 1rem;
+  }
+
+  .concept__nav-links {
+    display: none;
+  }
+
+  .concept__dots {
+    bottom: 0.7rem;
+    right: 0.7rem;
+  }
+}
