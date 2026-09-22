@@ -3,10 +3,11 @@
   "scripts": {
     "dev": "vite build --watch",
     "build": "vite build",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "tsc --noEmit && tsc --noEmit -p worker/tsconfig.json",
     "deploy": "vite build && wrangler deploy"
   },
   "devDependencies": {
+    "@cloudflare/workers-types": "^5.20260922.1",
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
     "@types/three": "^0.186.0",
