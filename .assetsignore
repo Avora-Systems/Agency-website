@@ -28,3 +28,8 @@ package-lock.json
 tsconfig.json
 vite.config.ts
 .mcp.json
+
+# Worker source (/api/contact) — only reachable as a route, never served
+# as a static file. Secrets live in Worker secrets, never in this source.
+worker
+worker/**

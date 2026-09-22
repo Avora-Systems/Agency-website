@@ -154,10 +154,29 @@
   var contactForm = document.getElementById("contact-form");
 
   if (contactForm) {
-    var CONTACT_WEBHOOK_URL = "https://n8n-production-7a6e1.up.railway.app/webhook/caa86be5-c643-4b5b-81df-3d7a56258cc4";
+    var CONTACT_ENDPOINT = "/api/contact";
     var submitBtn = contactForm.querySelector(".contact-form__submit");
     var errorEl = document.getElementById("contact-form-error");
     var successEl = document.getElementById("contact-success");
+
+    var resetTurnstile = function () {
+      if (window.turnstile && typeof window.turnstile.reset === "function") {
+        window.turnstile.reset();
+      }
+    };
+
+    // Turnstile calls these by name (data-error-callback / data-expired-callback),
+    // so they must be reachable on window, not just inside this closure.
+    window.onTurnstileError = function (errorCode) {
+      errorEl.textContent = "The verification check couldn't load (error " + errorCode + "). Please refresh the page and try again, or email us directly.";
+      errorEl.hidden = false;
+    };
+
+    window.onTurnstileExpired = function () {
+      errorEl.textContent = "Verification expired — please tick the box again before sending.";
+      errorEl.hidden = false;
+      resetTurnstile();
+    };
 
     contactForm.addEventListener("submit", function (e) {
       e.preventDefault();
@@ -171,6 +190,13 @@
         return;
       }
 
+      var turnstileToken = String(formData.get("cf-turnstile-response") || "");
+      if (!turnstileToken) {
+        errorEl.textContent = "Please complete the verification check before sending.";
+        errorEl.hidden = false;
+        return;
+      }
+
       errorEl.hidden = true;
       submitBtn.disabled = true;
       submitBtn.classList.add("is-loading");
@@ -179,10 +205,10 @@
         name: String(formData.get("name") || "").trim(),
         email: String(formData.get("email") || "").trim(),
         message: String(formData.get("message") || "").trim(),
-        source: "website"
+        turnstileToken: turnstileToken
       };
 
-      fetch(CONTACT_WEBHOOK_URL, {
+      fetch(CONTACT_ENDPOINT, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload)
@@ -197,6 +223,7 @@
         .catch(function () {
           errorEl.textContent = "Something went wrong sending your message. Please try again, or email us directly.";
           errorEl.hidden = false;
+          resetTurnstile();
         })
         .finally(function () {
           submitBtn.disabled = false;

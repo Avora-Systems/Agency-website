@@ -11,6 +11,7 @@
 <link rel="stylesheet" href="css/styles.css">
 <link rel="stylesheet" href="css/showcase.css">
 <link rel="stylesheet" href="app-dist/avora-app.css">
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </head>
 <body>
 
@@ -927,6 +928,8 @@
             <label for="contact-message">Message</label>
             <textarea id="contact-message" name="message" rows="5" required maxlength="4000"></textarea>
           </div>
+
+          <div class="cf-turnstile" data-sitekey="0x4AAAAAAE_8ZjXF5hXoMmMW" data-theme="light" data-error-callback="onTurnstileError" data-expired-callback="onTurnstileExpired"></div>
 
           <p class="contact-form__error" id="contact-form-error" role="alert" hidden></p>
 
