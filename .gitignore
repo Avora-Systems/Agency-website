@@ -2,3 +2,12 @@ node_modules/
 .wrangler/
 .DS_Store
 app-dist/
+
+# Secrets / local env — this project has none today, but never let one slip in
+.env
+.env.*
+!.env.example
+.dev.vars
+.dev.vars.*
+*.pem
+*.key

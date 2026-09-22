@@ -162,11 +162,19 @@
     contactForm.addEventListener("submit", function (e) {
       e.preventDefault();
 
+      var formData = new FormData(contactForm);
+
+      // Honeypot: hidden from real users, only a bot fills every field.
+      if (String(formData.get("company") || "").trim() !== "") {
+        contactForm.hidden = true;
+        successEl.hidden = false;
+        return;
+      }
+
       errorEl.hidden = true;
       submitBtn.disabled = true;
       submitBtn.classList.add("is-loading");
 
-      var formData = new FormData(contactForm);
       var payload = {
         name: String(formData.get("name") || "").trim(),
         email: String(formData.get("email") || "").trim(),
