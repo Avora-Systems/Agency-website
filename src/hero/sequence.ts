@@ -1,109 +1,96 @@
-// Data model for the Avora System hero: a real business workflow
-// (enquiry -> processing -> CRM/calendar -> response -> booking confirmed),
-// not a decorative visual. Positions are percentages of the stage box, so
-// the whole composition scales with it responsively.
+// Data model for the Avora hero: a business automation FLOW, not a
+// dashboard. Five stations (Enquiry -> AI -> CRM -> Calendar -> Booked) sit
+// at staggered heights along one continuous curved path — Avora itself is
+// represented by that connecting current, not by a central node, so nothing
+// here reads as "one big object with things orbiting it."
 
-export const FUNCTION_TAGS = [
-  "Enquiry",
-  "Email",
-  "WhatsApp",
-  "AI",
-  "CRM",
-  "Calendar",
-  "Invoicing",
-  "Documents",
-] as const;
+export type Point = [number, number];
 
-export type FunctionTag = (typeof FUNCTION_TAGS)[number];
+export type StationId = "enquiry" | "ai" | "crm" | "calendar" | "booked";
 
-export type DockId = "enquiry" | "crm" | "calendar" | "response";
-
-export interface DockPosition {
-  left: number;
-  top: number;
+export interface Station {
+  id: StationId;
+  label: string;
+  position: Point;
 }
 
-// A near-square stage (see hero.css aspect-ratio) — percentages below are
-// close enough to true angles/distances for restrained decorative lines.
-// The top ~14% is reserved for the function-tags header and the bottom
-// ~30% for the status chip (a sibling of this layout, not part of it), so
-// the module/docks live in the band between. Positions are chosen so the
-// module (26% wide, centered) and every card (capped at 138px) clear each
-// other with margin at the panel's smallest supported width — verified by
-// hand, not just by eye, since this composition must never overlap itself.
-export const MODULE_POSITION: DockPosition = { left: 50, top: 43 };
-
-/** Where the single active card sits in compact mode (see AvoraSystem) —
- * independent of the desktop dock positions below. */
-export const COMPACT_CARD_POSITION: DockPosition = { left: 50, top: 66 };
-
-export const DOCK_POSITIONS: Record<DockId, DockPosition> = {
-  enquiry: { left: 7, top: 12 },
-  crm: { left: 93, top: 22 },
-  calendar: { left: 90, top: 60 },
-  response: { left: 10, top: 63 },
-};
-
-export interface DockContentLine {
-  label?: string;
-  value: string;
-}
-
-export interface DockContent {
-  title: string;
-  lines: DockContentLine[];
-  footer?: string;
-}
-
-export const DOCK_CONTENT: Record<DockId, DockContent> = {
-  enquiry: {
-    title: "Website enquiry",
-    lines: [{ value: "“Hi, could you quote for a bathroom re-fit next week?”" }],
-    footer: "Just now",
-  },
-  crm: {
-    title: "CRM",
-    lines: [
-      { label: "Lead", value: "James Carter" },
-      { label: "Job", value: "Bathroom re-fit" },
-      { label: "Status", value: "New lead" },
-    ],
-  },
-  calendar: {
-    title: "Calendar",
-    lines: [
-      { label: "Tuesday", value: "10:30 AM" },
-      { value: "Site visit available" },
-    ],
-  },
-  response: {
-    title: "AI response",
-    lines: [{ label: "Draft", value: "Ready to send" }],
-    footer: "Send response",
-  },
-};
-
-export const PROCESSING_STEPS = [
-  "Enquiry received",
-  "Customer details extracted",
-  "Availability checked",
-  "Response generated",
+// A near-square stage (see hero.css aspect-ratio), 0-100 coordinate space.
+// Heights deliberately vary (30 / 66 / 26 / 64 / 34) so the path through
+// them is a wave, not a straight pipeline — the brief specifically asked
+// for varied heights and overlapping depth rather than a flowchart.
+export const STATIONS: Station[] = [
+  { id: "enquiry", label: "Enquiry", position: [9, 30] },
+  { id: "ai", label: "AI", position: [31, 68] },
+  { id: "crm", label: "CRM", position: [56, 24] },
+  { id: "calendar", label: "Calendar", position: [79, 64] },
+  { id: "booked", label: "Booked", position: [93, 32] },
 ];
+
+export interface Branch {
+  id: string;
+  label: string;
+  from: Point;
+  to: Point;
+  /** Index into STATIONS whose active phase briefly lights this branch. */
+  duringIndex: number;
+}
+
+/** Ghost branch targets — never a primary stop, just a brief pulse while
+ * their parent station is active, to suggest Avora reaches more of the
+ * business than the one path being told right now. Deliberately never more
+ * than two lit at once (each is tied to a single phase), so this reads as
+ * "expandable" rather than the old 8-item wall of equal-priority icons. */
+export const BRANCHES: Branch[] = [
+  { id: "whatsapp", label: "WhatsApp", from: STATIONS[1]!.position, to: [16, 74], duringIndex: 1 },
+  { id: "email", label: "Email", from: STATIONS[1]!.position, to: [44, 77], duringIndex: 1 },
+  { id: "documents", label: "Documents", from: STATIONS[2]!.position, to: [69, 6], duringIndex: 2 },
+  { id: "invoicing", label: "Invoicing", from: STATIONS[4]!.position, to: [79, 9], duringIndex: 4 },
+];
+
+/** A faint, always-present backbone connecting the first and last station
+ * directly — a shallow arc well above the main wave, distinct from it, read
+ * as "the system stays connected end-to-end" rather than another journey to
+ * follow. Static and very dim; never brightens or carries the signal. */
+export const BACKBONE_PATH_D = `M ${STATIONS[0]!.position[0]},${STATIONS[0]!.position[1]} C 35,2 65,2 ${STATIONS[4]!.position[0]},${STATIONS[4]!.position[1]}`;
+
+/** Uniform Catmull-Rom -> cubic-bezier conversion (tension 1/6), duplicating
+ * the end points so the curve doesn't overshoot at the first/last station.
+ * Produces one smooth path through every station in order. */
+export function smoothPathD(points: Point[]): string {
+  if (points.length < 2) return "";
+  let d = `M ${points[0]![0]},${points[0]![1]}`;
+  for (let i = 0; i < points.length - 1; i++) {
+    const p0 = points[i - 1] ?? points[i]!;
+    const p1 = points[i]!;
+    const p2 = points[i + 1]!;
+    const p3 = points[i + 2] ?? p2;
+    const c1x = p1[0] + (p2[0] - p0[0]) / 6;
+    const c1y = p1[1] + (p2[1] - p0[1]) / 6;
+    const c2x = p2[0] - (p3[0] - p1[0]) / 6;
+    const c2y = p2[1] - (p3[1] - p1[1]) / 6;
+    d += ` C ${c1x},${c1y} ${c2x},${c2y} ${p2[0]},${p2[1]}`;
+  }
+  return d;
+}
+
+export const RAIL_PATH_D = smoothPathD(STATIONS.map((s) => s.position));
 
 export interface HeroPhase {
   range: [number, number];
   status: string;
   detail: string;
-  activeTags: FunctionTag[];
-  visibleDocks: DockId[];
+  /** Index into STATIONS currently receiving the signal, or -1 before the
+   * first enquiry arrives. */
+  activeIndex: number;
 }
 
 export const HERO_PHASES: HeroPhase[] = [
-  { range: [0, 0.16], status: "Avora is connected", detail: "Watching every channel for new enquiries", activeTags: [], visibleDocks: [] },
-  { range: [0.16, 0.36], status: "New enquiry received", detail: "Bathroom re-fit quote request", activeTags: ["Enquiry"], visibleDocks: ["enquiry"] },
-  { range: [0.36, 0.56], status: "AI processing", detail: "Extracting details, checking availability", activeTags: ["AI"], visibleDocks: ["enquiry"] },
-  { range: [0.56, 0.8], status: "Calendar & CRM updated", detail: "Slot held, lead logged automatically", activeTags: ["CRM", "Calendar"], visibleDocks: ["enquiry", "crm", "calendar"] },
-  { range: [0.8, 1.01], status: "Booking confirmed", detail: "Reply sent · CRM updated", activeTags: ["Email"], visibleDocks: ["enquiry", "crm", "calendar", "response"] },
+  { range: [0, 0.12], status: "Avora is connected", detail: "Watching every channel for new enquiries", activeIndex: -1 },
+  { range: [0.12, 0.3], status: "New enquiry", detail: "Website enquiry received", activeIndex: 0 },
+  { range: [0.3, 0.48], status: "Reply generated", detail: "AI drafts a response and checks availability", activeIndex: 1 },
+  { range: [0.48, 0.64], status: "Lead updated", detail: "CRM logged automatically", activeIndex: 2 },
+  { range: [0.64, 0.82], status: "Slot found", detail: "A calendar slot is held automatically", activeIndex: 3 },
+  { range: [0.82, 1.01], status: "Booking confirmed", detail: "Customer notified automatically", activeIndex: 4 },
 ];
 
 export interface PhaseState {
@@ -122,25 +109,24 @@ export function phaseForProgress(progress: number): PhaseState {
   return { phase, index: safeIndex, local };
 }
 
-/** Which dock (if any) has full prominence right now — as opposed to
- * merely being visible/"handled" — derived rather than stored per phase
- * since phase 3 (connect) hands prominence between CRM and Calendar. */
-export function activeDockFor(index: number, local: number): DockId | null {
-  if (index === 1 || index === 2) return "enquiry";
-  if (index === 3) return local < 0.5 ? "crm" : "calendar";
-  if (index === 4) return "response";
-  return null;
+/** Station status is derived rather than stored per phase: "upcoming" (not
+ * reached yet), "active" (receiving the signal right now, shows the phase's
+ * status bubble), or "handled" (signal already passed through, settles to a
+ * steady lit state with a small check). */
+export type StationStatus = "upcoming" | "active" | "handled";
+
+export function statusForStation(stationIndex: number, activeIndex: number): StationStatus {
+  if (stationIndex === activeIndex) return "active";
+  if (stationIndex < activeIndex) return "handled";
+  return "upcoming";
 }
 
-/** The module's own short internal status line — a system log, not the
- * plain-language headline shown in the bottom status chip. */
-export function moduleLineFor(index: number, local: number): string {
-  if (index === 0) return "Monitoring";
-  if (index === 1) return "Reading enquiry";
-  if (index === 2) {
-    const step = Math.min(PROCESSING_STEPS.length - 1, Math.floor(local * PROCESSING_STEPS.length));
-    return PROCESSING_STEPS[step]!;
-  }
-  if (index === 3) return "Syncing systems";
-  return "Complete";
+/** Keeps the status bubble from overflowing the panel edge for stations
+ * near the left/right sides (Enquiry at x=9, Booked at x=93). */
+export type BubbleAlign = "start" | "center" | "end";
+
+export function bubbleAlignFor(x: number): BubbleAlign {
+  if (x < 20) return "start";
+  if (x > 80) return "end";
+  return "center";
 }

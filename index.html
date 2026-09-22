@@ -89,41 +89,57 @@
              ("booking confirmed") state, left in place if this never mounts. -->
         <div id="avora-hero-root">
           <div class="avora-core">
-            <div class="avora-system no-motion" aria-hidden="true">
-              <svg class="avora-system__lines" viewBox="0 0 100 100" preserveAspectRatio="none">
-                <line x1="50" y1="43" x2="7" y2="12" />
-                <line x1="50" y1="43" x2="93" y2="22" />
-                <line x1="50" y1="43" x2="90" y2="60" />
-                <line x1="50" y1="43" x2="10" y2="63" />
+            <div class="flow no-motion" aria-hidden="true">
+              <div class="flow__spotlight" style="left: 93%; top: 32%;"></div>
+              <svg class="flow__rail" viewBox="0 0 100 100" preserveAspectRatio="none">
+                <path class="flow__backbone" d="M 9,30 C 35,2 65,2 93,32" />
+                <path class="flow__rail-base" d="M 9,30 C 12.667,36.333 23.167,69 31,68 C 38.833,67 48,24.667 56,24 C 64,23.333 72.833,62.667 79,64 C 85.167,65.333 90.667,37.333 93,32" />
+                <path class="flow__rail-progress" d="M 9,30 C 12.667,36.333 23.167,69 31,68 C 38.833,67 48,24.667 56,24 C 64,23.333 72.833,62.667 79,64 C 85.167,65.333 90.667,37.333 93,32" />
+                <path class="flow__branch" stroke-dasharray="0.01 1000" d="M 31,68 C 27,79 24,83 21,92" />
+                <path class="flow__branch" stroke-dasharray="0.01 1000" d="M 31,68 C 27,79 46,85 43,94" />
+                <path class="flow__branch" stroke-dasharray="0.01 1000" d="M 56,24 C 52,13 65,3 69,6" />
+                <path class="flow__branch" stroke-dasharray="0.01 1000" d="M 93,32 C 89,21 82,12 79,9" />
               </svg>
-              <div class="avora-system__module" style="left: 50%; top: 43%;">
-                <span class="avora-system__module-mark">AVORA</span>
-                <span class="avora-system__module-line">Complete</span>
-              </div>
-              <div class="avora-system__card avora-system__card--enquiry is-muted" style="left: 7%; top: 12%;">
-                <span class="avora-system__card-title">Website enquiry
-                  <svg class="avora-system__card-check" width="11" height="11" viewBox="0 0 16 16" fill="none"><path d="M3.5 8.5 6.5 11.5 12.5 4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+
+              <div class="flow-station flow-station--handled flow-station--enquiry" style="left: 9%; top: 30%;">
+                <span class="flow-station__node">
+                  <span class="flow-station__led" aria-hidden="true"></span>
+                  <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 3.5h11a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1H8l-3 2.5V11.5H2.5a1 1 0 0 1-1-1v-6a1 1 0 0 1 1-1Z" /></svg>
+                  <svg class="flow-station__check" width="9" height="9" viewBox="0 0 16 16" fill="none"><path d="M3.5 8.5 6.5 11.5 12.5 4.5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 </span>
-                <span class="avora-system__card-line">&ldquo;Could you quote for a bathroom re-fit?&rdquo;</span>
+                <span class="flow-station__label">Enquiry</span>
               </div>
-              <div class="avora-system__card avora-system__card--crm is-muted" style="left: 93%; top: 22%;">
-                <span class="avora-system__card-title">CRM
-                  <svg class="avora-system__card-check" width="11" height="11" viewBox="0 0 16 16" fill="none"><path d="M3.5 8.5 6.5 11.5 12.5 4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <div class="flow-station flow-station--handled flow-station--ai" style="left: 31%; top: 68%;">
+                <span class="flow-station__node">
+                  <span class="flow-station__led" aria-hidden="true"></span>
+                  <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M8 1.8 9.3 6 13.5 7.3 9.3 8.6 8 12.8 6.7 8.6 2.5 7.3 6.7 6 8 1.8Z" /></svg>
+                  <svg class="flow-station__check" width="9" height="9" viewBox="0 0 16 16" fill="none"><path d="M3.5 8.5 6.5 11.5 12.5 4.5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 </span>
-                <span class="avora-system__card-line"><b>Lead</b>James Carter</span>
+                <span class="flow-station__label">AI</span>
               </div>
-              <div class="avora-system__card avora-system__card--calendar is-muted" style="left: 90%; top: 60%;">
-                <span class="avora-system__card-title">Calendar
-                  <svg class="avora-system__card-check" width="11" height="11" viewBox="0 0 16 16" fill="none"><path d="M3.5 8.5 6.5 11.5 12.5 4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <div class="flow-station flow-station--handled flow-station--crm" style="left: 56%; top: 24%;">
+                <span class="flow-station__node">
+                  <span class="flow-station__led" aria-hidden="true"></span>
+                  <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3.5" width="12" height="9" rx="1.4" /><circle cx="6" cy="7.4" r="1.4" /><path d="M3.8 10.6c.4-1 1.2-1.5 2.2-1.5s1.8.5 2.2 1.5M9.8 6.6h3M9.8 9h3" /></svg>
+                  <svg class="flow-station__check" width="9" height="9" viewBox="0 0 16 16" fill="none"><path d="M3.5 8.5 6.5 11.5 12.5 4.5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 </span>
-                <span class="avora-system__card-line"><b>Tuesday</b>10:30 AM</span>
+                <span class="flow-station__label">CRM</span>
               </div>
-              <div class="avora-system__card avora-system__card--response is-active" style="left: 10%; top: 63%;">
-                <span class="avora-system__card-title">AI response</span>
-                <span class="avora-system__card-line"><b>Draft</b>Ready to send</span>
+              <div class="flow-station flow-station--handled flow-station--calendar" style="left: 79%; top: 64%;">
+                <span class="flow-station__node">
+                  <span class="flow-station__led" aria-hidden="true"></span>
+                  <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="3" width="11" height="10.5" rx="1.4" /><path d="M2.5 6.2h11M5.3 1.8v2.6M10.7 1.8v2.6" /><circle class="flow-icon__dot" cx="8" cy="9.6" r="1" fill="currentColor" stroke="none" /></svg>
+                  <svg class="flow-station__check" width="9" height="9" viewBox="0 0 16 16" fill="none"><path d="M3.5 8.5 6.5 11.5 12.5 4.5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </span>
+                <span class="flow-station__label">Calendar</span>
               </div>
-              <div class="avora-system__tags">
-                <span>Enquiry</span><span>Email</span><span>WhatsApp</span><span>AI</span><span>CRM</span><span>Calendar</span><span>Invoicing</span><span>Documents</span>
+              <div class="flow-station flow-station--handled flow-station--booked" style="left: 93%; top: 32%;">
+                <span class="flow-station__node">
+                  <span class="flow-station__led" aria-hidden="true"></span>
+                  <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="6.2" /><path class="flow-icon__check-path" d="M5.3 8.1 7.1 9.9 10.8 6.2" /></svg>
+                  <svg class="flow-station__check" width="9" height="9" viewBox="0 0 16 16" fill="none"><path d="M3.5 8.5 6.5 11.5 12.5 4.5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </span>
+                <span class="flow-station__label">Booked</span>
               </div>
             </div>
             <div class="avora-core__status">

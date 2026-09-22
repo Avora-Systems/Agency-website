@@ -100,11 +100,11 @@ export function HeroExperience() {
   // automatically. Reduced motion: settle on the resolved end state and
   // never animate at all.
   const progress = prefersReducedMotion ? 1 : canScrollPin ? scrollProgress : autoProgress;
-  const { phase, index, local } = phaseForProgress(progress);
+  const { phase } = phaseForProgress(progress);
 
   return (
     <div className="avora-core">
-      <AvoraSystem phase={phase} index={index} local={local} motionEnabled={!prefersReducedMotion} compact={isCompact} />
+      <AvoraSystem phase={phase} progress={progress} motionEnabled={!prefersReducedMotion} compact={isCompact} />
 
       <div className="avora-core__status" role="status" aria-live="polite">
         <span className="avora-core__status-dot" aria-hidden="true"></span>

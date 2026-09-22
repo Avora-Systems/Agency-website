@@ -72,49 +72,44 @@
 }
 
 /* ============================================================
-   The Avora System — a live workflow, not a decorative object.
-   Built in plain DOM/CSS (no WebGL): real typography reads far
-   better than anything a 3D mesh can render, and it stays cheap
+   The Avora flow — a business-automation FLOW, not a dashboard.
+   Five stations sit at staggered heights along one continuous
+   curved path; Avora itself is the connecting current, not a
+   central object. Built in plain DOM/CSS + SVG (no WebGL): real
+   typography reads far better than a 3D mesh, and it stays cheap
    enough to run on every viewport, not just desktop.
    ============================================================ */
 
-.avora-system {
+.flow {
   position: absolute;
   inset: 0;
   --tilt-x: 0deg;
   --tilt-y: 0deg;
+  --tilt-x-far: 0deg;
+  --tilt-y-far: 0deg;
 }
 
-.avora-system__tags {
+/* A soft glow that eases toward whichever station is active (see
+   AvoraSystem) — the background plane. It drifts on the shallower "far"
+   tilt, so cursor movement reads as genuine depth between layers rather
+   than the whole panel tilting as one flat card. */
+.flow__spotlight {
   position: absolute;
-  top: 0.9rem;
-  left: 1rem;
-  right: 1rem;
+  z-index: 0;
+  left: 50%;
+  top: 46%;
+  width: 60%;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%) rotateX(var(--tilt-x-far)) rotateY(var(--tilt-y-far));
+  transition: transform 0.4s ease-out;
+  background: radial-gradient(circle, rgba(77, 127, 255, 0.16) 0%, rgba(77, 127, 255, 0.05) 45%, transparent 72%);
+  filter: blur(2px);
+  pointer-events: none;
+}
+
+.flow__rail {
+  position: absolute;
   z-index: 1;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.35rem;
-}
-
-.avora-system__tags span {
-  font-size: 0.58rem;
-  font-weight: 600;
-  letter-spacing: 0.03em;
-  color: rgba(255, 255, 255, 0.34);
-  padding: 0.2rem 0.5rem;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 999px;
-  transition: color 0.4s ease, border-color 0.4s ease, background-color 0.4s ease;
-}
-
-.avora-system__tags span.is-active {
-  color: #cdd9ff;
-  border-color: rgba(77, 127, 255, 0.5);
-  background: rgba(77, 127, 255, 0.14);
-}
-
-.avora-system__lines {
-  position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
@@ -123,178 +118,395 @@
   transition: transform 0.3s ease-out;
 }
 
-.avora-system__lines line {
-  stroke: rgba(255, 255, 255, 0.14);
-  stroke-width: 0.35;
+.flow__rail-base,
+.flow__rail-progress,
+.flow__branch,
+.flow__backbone {
+  fill: none;
   vector-effect: non-scaling-stroke;
-  transition: stroke 0.4s ease, stroke-width 0.4s ease;
+  stroke-linecap: round;
 }
 
-.avora-system__lines line.is-active {
-  stroke: #4d7fff;
-  stroke-width: 0.5;
+.flow__rail-base {
+  stroke: rgba(255, 255, 255, 0.13);
+  stroke-width: 0.45;
+  transform-origin: center;
+  animation: flow-rail-shimmer 6s ease-in-out infinite;
 }
 
-.avora-system__particle {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 5px;
-  height: 5px;
-  margin: -2.5px 0 0 -2.5px;
-  border-radius: 50%;
-  background: #7ea2ff;
-  box-shadow: 0 0 6px 1px rgba(126, 162, 255, 0.65);
+@keyframes flow-rail-shimmer {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.62; }
+}
+
+/* The always-on backbone: a shallow arc from Enquiry to Booked, well above
+   the main wave and never brightening — reads as "the system stays
+   connected end-to-end", distinct from the one journey being animated. */
+.flow__backbone {
+  stroke: rgba(255, 255, 255, 0.055);
+  stroke-width: 0.3;
+  stroke-dasharray: 0.3 2.2;
+}
+
+/* Two dim particles loop this same backbone continuously (see the mount
+   effect in AvoraSystem) — background activity independent of the signal,
+   so the panel never reads as fully frozen between phases. */
+.flow__ambient {
+  fill: #9db8ff;
   opacity: 0;
-  pointer-events: none;
-  z-index: 3;
 }
 
-.avora-system__module {
+.flow__rail-progress {
+  stroke: #4d7fff;
+  stroke-width: 0.55;
+  filter: drop-shadow(0 0 2.5px rgba(77, 127, 255, 0.75));
+}
+
+.flow__branch {
+  stroke: rgba(255, 255, 255, 0.4);
+  stroke-width: 0.32;
+  stroke-dasharray: 1.6 1.6;
+}
+
+.flow__branch-label {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  font-size: 0.56rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: rgba(255, 255, 255, 0.28);
+  opacity: 0;
+  transition: opacity 0.5s ease, color 0.5s ease;
+  pointer-events: none;
+}
+
+.flow__branch-label.is-active {
+  opacity: 1;
+  color: rgba(205, 217, 255, 0.75);
+}
+
+.flow__signal {
+  fill: #9db8ff;
+  filter: drop-shadow(0 0 3px rgba(126, 162, 255, 0.9)) drop-shadow(0 0 7px rgba(77, 127, 255, 0.55));
+}
+
+.flow-station {
   position: absolute;
   z-index: 2;
-  width: 25%;
-  min-width: 92px;
-  aspect-ratio: 1.6;
-  transform: translate(-50%, -50%) rotateX(var(--tilt-x)) rotateY(var(--tilt-y));
-  transition: transform 0.3s ease-out;
-  border-radius: 12px;
-  background: linear-gradient(155deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.015) 45%, rgba(255, 255, 255, 0.06));
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  box-shadow: 0 18px 40px -18px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.08);
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 0.4rem;
+  transform: translate(-50%, -50%) rotateX(var(--tilt-x)) rotateY(var(--tilt-y));
+  transition: transform 0.3s ease-out;
+}
+
+.flow-station__node {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
   justify-content: center;
-  gap: 0.3rem;
-  text-align: center;
-  padding: 0.3rem;
+  border-radius: 13px;
+  background: linear-gradient(155deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.015) 45%, rgba(255, 255, 255, 0.05));
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 10px 22px -14px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.07);
+  color: rgba(255, 255, 255, 0.4);
+  transition: color 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease, background 0.4s ease;
 }
 
-.avora-system__module-mark {
-  font-family: var(--font-display, sans-serif);
-  font-size: 0.6rem;
-  font-weight: 700;
-  letter-spacing: 0.22em;
-  color: rgba(255, 255, 255, 0.5);
+.flow-station__node svg {
+  width: 18px;
+  height: 18px;
 }
 
-.avora-system__module-line {
-  font-family: var(--font-body, sans-serif);
-  font-size: 0.7rem;
+.flow-station--handled .flow-station__node {
+  color: rgba(210, 220, 255, 0.75);
+  border-color: rgba(77, 127, 255, 0.3);
+  box-shadow: 0 10px 22px -14px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.07), 0 0 10px -4px rgba(77, 127, 255, 0.4);
+}
+
+.flow-station--active .flow-station__node {
+  color: #cdd9ff;
+  border-color: rgba(77, 127, 255, 0.6);
+  background: linear-gradient(155deg, rgba(77, 127, 255, 0.28), rgba(77, 127, 255, 0.04) 55%, rgba(77, 127, 255, 0.14));
+  box-shadow: 0 12px 26px -14px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(77, 127, 255, 0.2), 0 0 18px -2px rgba(77, 127, 255, 0.5), 0 0 34px -6px rgba(77, 127, 255, 0.3);
+  animation: flow-node-pulse 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes flow-node-pulse {
+  0% { transform: scale(0.86); }
+  55% { transform: scale(1.12); }
+  100% { transform: scale(1); }
+}
+
+/* A tiny persistent status LED, beside the icon rather than replacing it —
+   present in every state so a station always reads as "system", not just
+   "icon": dim grey before its turn, pulsing blue on arrival, steady green
+   once handled (the corner check adds the explicit confirmation). */
+.flow-station__led {
+  position: absolute;
+  left: 5px;
+  top: 5px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.22);
+  transition: background 0.4s ease, box-shadow 0.4s ease;
+}
+
+.flow-station--active .flow-station__led {
+  background: #7ea2ff;
+  box-shadow: 0 0 0 2.5px rgba(126, 162, 255, 0.25);
+  animation: avora-status-pulse 1.8s ease-in-out infinite;
+}
+
+.flow-station--handled .flow-station__led {
+  background: #6fe3a0;
+  box-shadow: 0 0 0 2px rgba(111, 227, 160, 0.2);
+}
+
+.flow-station__check {
+  position: absolute;
+  right: -4px;
+  bottom: -4px;
+  width: 15px;
+  height: 15px;
+  padding: 2px;
+  border-radius: 50%;
+  background: #0b0d12;
+  border: 1px solid rgba(77, 127, 255, 0.35);
+  color: #6fe3a0;
+  animation: flow-check-in 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes flow-check-in {
+  from { opacity: 0; transform: scale(0.6); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* Per-station micro-interactions — small, meaningful, not full fake app
+   windows. Each only plays while that station is the active one. */
+
+/* Enquiry: a brief notification ring expands outward as the message lands. */
+.flow-station--enquiry.flow-station--active .flow-station__node::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  border: 1.5px solid rgba(126, 162, 255, 0.55);
+  animation: flow-ring-burst 0.7s ease-out;
+}
+
+/* AI: the spark icon turns gently while it "thinks". */
+.flow-station--ai.flow-station--active .flow-station__node svg {
+  animation: flow-spark-spin 2.4s linear infinite;
+}
+
+/* CRM: a small record line writes itself in underneath the icon. */
+.flow-station--crm .flow-station__node::after {
+  content: "";
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  bottom: 6px;
+  height: 1.5px;
+  border-radius: 1px;
+  background: rgba(126, 162, 255, 0.7);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.5s ease-out;
+}
+
+.flow-station--crm.flow-station--active .flow-station__node::after,
+.flow-station--crm.flow-station--handled .flow-station__node::after {
+  transform: scaleX(1);
+}
+
+/* Calendar: the held-slot dot pulses once as availability is found. */
+.flow-station--calendar.flow-station--active .flow-icon__dot {
+  animation: flow-dot-pulse 0.6s ease-out;
+}
+
+/* Booked: the tick draws itself in, plus a wider confirmation ring — the
+   one deliberately bigger moment, since it closes the story. */
+.flow-station--booked.flow-station--active .flow-icon__check-path {
+  stroke-dasharray: 9;
+  stroke-dashoffset: 9;
+  animation: flow-check-draw 0.5s ease-out 0.1s forwards;
+}
+
+.flow-station--booked.flow-station--active .flow-station__node::before {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  border-radius: inherit;
+  border: 1.5px solid rgba(126, 162, 255, 0.5);
+  animation: flow-ring-burst 0.9s ease-out 0.1s both;
+}
+
+@keyframes flow-ring-burst {
+  from { opacity: 0.9; transform: scale(1); }
+  to { opacity: 0; transform: scale(1.55); }
+}
+
+@keyframes flow-spark-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes flow-dot-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(2.2); }
+}
+
+@keyframes flow-check-draw {
+  to { stroke-dashoffset: 0; }
+}
+
+.flow-station__label {
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: rgba(255, 255, 255, 0.38);
+  white-space: nowrap;
+  transition: color 0.4s ease;
+}
+
+.flow-station--active .flow-station__label,
+.flow-station--handled .flow-station__label {
+  color: rgba(245, 244, 240, 0.78);
+}
+
+.flow-station__bubble {
+  position: absolute;
+  bottom: calc(100% + 0.5rem);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  padding: 0.4rem 0.7rem;
+  border-radius: 999px;
+  background: rgba(16, 19, 26, 0.92);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 12px 24px -12px rgba(0, 0, 0, 0.6);
+  font-size: 0.68rem;
   font-weight: 600;
   color: #f5f4f0;
-  letter-spacing: -0.01em;
+  white-space: nowrap;
+  /* Opacity-only entrance: the positioning transform above (translateX, or
+     none for the edge variants below) must survive the animation, and a
+     CSS animation's keyframes fully replace `transform` while running, so
+     scale/slide-in effects here would fight the static positioning. The
+     node's own pulse (see .flow-station--active) already sells "arrived". */
+  animation: flow-bubble-in 0.35s ease-out both;
 }
 
-.avora-system__card {
-  --anchor-x: 0%;
-  --anchor-y: 0%;
-  --card-scale: 1;
-  position: absolute;
-  z-index: 2;
-  width: 34%;
-  min-width: 104px;
-  max-width: 138px;
-  padding: 0.5rem 0.6rem 0.55rem;
-  border-radius: 10px;
-  background: rgba(20, 23, 30, 0.86);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: 0 10px 24px -14px rgba(0, 0, 0, 0.55);
-  display: flex;
-  flex-direction: column;
-  gap: 0.22rem;
-  transform: translate(var(--anchor-x), var(--anchor-y)) scale(var(--card-scale)) rotateX(var(--tilt-x)) rotateY(var(--tilt-y));
-  transition: opacity 0.4s ease, transform 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
-  animation: avora-card-enter 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+.flow-station__bubble--below {
+  bottom: auto;
+  top: calc(100% + 0.5rem);
 }
 
-.no-motion .avora-system__card {
+/* Edge stations (Enquiry at x=9, Booked at x=93): anchor to the node's edge
+   and grow inward instead of centering, or the bubble overflows the panel. */
+.flow-station__bubble--start {
+  left: 0;
+  transform: none;
+}
+
+.flow-station__bubble--end {
+  left: auto;
+  right: 0;
+  transform: none;
+}
+
+@keyframes flow-bubble-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.no-motion .flow-station__node,
+.no-motion .flow-station__node::before,
+.no-motion .flow-station__node::after,
+.no-motion .flow-station__node svg,
+.no-motion .flow-station__led,
+.no-motion .flow-station__check,
+.no-motion .flow-icon__dot,
+.no-motion .flow-icon__check-path,
+.no-motion .flow-station__bubble,
+.no-motion .flow__rail-base {
   animation: none;
 }
 
-.avora-system__card--enquiry { --anchor-x: 0%; --anchor-y: 0%; }
-.avora-system__card--crm { --anchor-x: -100%; --anchor-y: 0%; }
-.avora-system__card--calendar { --anchor-x: -100%; --anchor-y: -100%; }
-.avora-system__card--response { --anchor-x: 0%; --anchor-y: -100%; }
-
-@keyframes avora-card-enter {
-  from { opacity: 0; transform: translate(var(--anchor-x), var(--anchor-y)) scale(0.9); }
-  to { opacity: 1; transform: translate(var(--anchor-x), var(--anchor-y)) scale(1); }
+.no-motion .flow-station--crm .flow-station__node::after {
+  transition: none;
 }
 
-.avora-system__card.is-active {
-  border-color: rgba(77, 127, 255, 0.45);
-  box-shadow: 0 14px 30px -14px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(77, 127, 255, 0.15);
+.no-motion .flow-icon__check-path {
+  stroke-dasharray: none;
 }
 
-.avora-system__card.is-muted {
-  --card-scale: 0.94;
-  opacity: 0.58;
+/* Idle drift: each station floats independently and very slightly, so the
+   panel reads as a live system even before scroll/autoplay begins. Keyed to
+   station id rather than sibling position — robust to the background
+   spotlight/backbone elements sharing the same parent. */
+.flow-station { animation: flow-drift 6s ease-in-out infinite; }
+.flow-station--enquiry { animation-delay: 0s; animation-duration: 6.4s; }
+.flow-station--ai { animation-delay: -1.6s; animation-duration: 5.6s; }
+.flow-station--crm { animation-delay: -3.1s; animation-duration: 6.9s; }
+.flow-station--calendar { animation-delay: -0.8s; animation-duration: 6.1s; }
+.flow-station--booked { animation-delay: -2.4s; animation-duration: 5.9s; }
+
+@keyframes flow-drift {
+  0%, 100% { margin-top: 0; }
+  50% { margin-top: -4px; }
 }
 
-.avora-system__card-title {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.4rem;
-  font-size: 0.6rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.48);
+.no-motion .flow-station {
+  animation: none;
 }
 
-.avora-system__card.is-active .avora-system__card-title {
-  color: #9db8ff;
-}
-
-.avora-system__card-check {
-  flex: none;
-  color: #6fe3a0;
-}
-
-.avora-system__card-line {
-  font-size: 0.7rem;
-  line-height: 1.35;
-  color: rgba(245, 244, 240, 0.85);
-}
-
-.avora-system__card-line b {
-  font-weight: 600;
-  color: #fff;
-  margin-right: 0.35em;
-}
-
-.avora-system__card-footer {
-  align-self: flex-start;
-  margin-top: 0.15rem;
-  font-size: 0.62rem;
-  font-weight: 600;
-  padding: 0.18rem 0.5rem;
-  border-radius: 999px;
-  background: rgba(77, 127, 255, 0.16);
-  color: #9db8ff;
-}
-
-/* Compact mode (<=600px, see HeroExperience): card content has a fixed
-   line-height regardless of container width, so four accumulated corner
-   cards start overlapping on a narrow phone panel. Below that width, show
-   only the current step, centered and full size, plus a small checklist
-   for whatever's already been handled — simpler, and a better fit for a
-   phone screen than a shrunk-down version of the desktop composition. */
-.avora-system__card--compact {
-  --anchor-x: -50%;
-  --anchor-y: -50%;
-  width: 62%;
-  max-width: 220px;
-  min-width: 150px;
-}
-
-.avora-system__checklist {
+/* Compact mode (<=600px, see HeroExperience): full stations for every
+   step would crowd a phone-width panel, since node/label size doesn't
+   shrink with the container. Below that width, show every non-active
+   station as a small dot on the rail (the flow shape still reads) and
+   only the current step as a full station, centered independently of
+   the desktop layout — plus a checklist for whatever's been handled. */
+.flow-station__dot {
   position: absolute;
-  top: 2.35rem;
+  z-index: 1;
+  width: 7px;
+  height: 7px;
+  margin: -3.5px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.22);
+  transition: background 0.4s ease;
+}
+
+.flow-station__dot--handled {
+  background: #4d7fff;
+}
+
+.flow-station--compact {
+  gap: 0.5rem;
+}
+
+.flow-station--compact .flow-station__node {
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+}
+
+.flow-station--compact .flow-station__node svg {
+  width: 22px;
+  height: 22px;
+}
+
+.flow__checklist {
+  position: absolute;
+  top: 0.9rem;
   left: 1rem;
   right: 1rem;
   z-index: 1;
@@ -306,22 +518,22 @@
   margin: 0;
 }
 
+.flow__checklist li {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.64rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.48);
+}
+
+.flow__checklist svg {
+  flex: none;
+  color: #6fe3a0;
+}
+
 @media (max-width: 600px) {
   .avora-core {
     aspect-ratio: 1 / 1.05;
   }
-}
-
-.avora-system__checklist li {
-  display: flex;
-  align-items: center;
-  gap: 0.3rem;
-  font-size: 0.66rem;
-  font-weight: 600;
-  color: rgba(255, 255, 255, 0.5);
-}
-
-.avora-system__checklist svg {
-  flex: none;
-  color: #6fe3a0;
 }
