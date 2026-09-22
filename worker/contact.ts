@@ -1,9 +1,59 @@
 interface Env {
   ASSETS: Fetcher;
-  CONTACT_RATE_LIMITER: { limit: (opts: { key: string }) => Promise<{ success: boolean }> };
+  CONTACT_RATE_LIMITER_DO: DurableObjectNamespace;
   TURNSTILE_SECRET_KEY: string;
   N8N_WEBHOOK_URL: string;
   N8N_SHARED_SECRET: string;
+}
+
+const RATE_LIMIT = 5;
+const RATE_LIMIT_WINDOW_MS = 60_000;
+
+// Cloudflare's Workers "simple" Rate Limiting binding keeps its counters
+// per-machine and syncs them across a location asynchronously (this is
+// documented, intentional behavior — see
+// https://developers.cloudflare.com/workers/runtime-apis/bindings/rate-limit/).
+// In practice that means requests from one client that land on different
+// edge machines (e.g. separate connections instead of one kept alive) can
+// each be counted against a different local counter and never trip the
+// limit. A Durable Object gives a single strongly-consistent counter per
+// key instead, so the limit holds regardless of which machine handles any
+// individual request.
+export class RateLimiterDO {
+  state: DurableObjectState;
+
+  constructor(state: DurableObjectState) {
+    this.state = state;
+  }
+
+  async fetch(): Promise<Response> {
+    const now = Date.now();
+    const stored = await this.state.storage.get<{ count: number; windowStart: number }>("window");
+
+    let count: number;
+    let windowStart: number;
+    if (stored && now - stored.windowStart < RATE_LIMIT_WINDOW_MS) {
+      windowStart = stored.windowStart;
+      count = stored.count + 1;
+    } else {
+      windowStart = now;
+      count = 1;
+    }
+
+    await this.state.storage.put("window", { count, windowStart });
+
+    return new Response(JSON.stringify({ success: count <= RATE_LIMIT }), {
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+}
+
+async function checkRateLimit(env: Env, key: string): Promise<boolean> {
+  const id = env.CONTACT_RATE_LIMITER_DO.idFromName(key);
+  const stub = env.CONTACT_RATE_LIMITER_DO.get(id);
+  const res = await stub.fetch("https://rate-limiter/check");
+  const { success } = (await res.json()) as { success: boolean };
+  return success;
 }
 
 const JSON_HEADERS = {
@@ -62,7 +112,7 @@ async function handleContact(request: Request, env: Env): Promise<Response> {
 
   const ip = request.headers.get("CF-Connecting-IP") || "unknown";
 
-  const { success: withinRateLimit } = await env.CONTACT_RATE_LIMITER.limit({ key: ip });
+  const withinRateLimit = await checkRateLimit(env, ip);
   if (!withinRateLimit) {
     return jsonResponse(429, { ok: false, error: "Too many requests. Please try again shortly." });
   }
